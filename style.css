@@ -1,46 +1,74 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f6f3ee;
-    color: #2f2f2f;
-    text-align: center;
+    background: #f5f5f7;
+    color: #1d1d1f;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        sans-serif;
 }
 
 .container {
-    max-width: 700px;
-    margin: 80px auto;
-    padding: 40px;
-    background: white;
-    border-radius: 24px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    max-width: 900px;
+    margin: 120px auto;
+    padding: 0 40px;
+    text-align: center;
 }
 
 h1 {
-    font-size: 42px;
-    margin-bottom: 10px;
+    font-size: 72px;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    margin-bottom: 20px;
 }
 
 p {
-    font-size: 20px;
-    color: #666;
+    font-size: 28px;
+    color: #6e6e73;
+    line-height: 1.4;
+    max-width: 700px;
+    margin: 0 auto 60px auto;
 }
 
-button {
-    font-size: 22px;
-    padding: 18px 32px;
-    margin: 12px;
-    border: none;
-    border-radius: 18px;
-    background: #7da87b;
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.primary-button {
+    background: #0071e3;
     color: white;
+    border: none;
+    border-radius: 980px;
+    padding: 16px 34px;
+    font-size: 19px;
+    font-weight: 500;
     cursor: pointer;
 }
 
-button:hover {
-    background: #6b9569;
+.primary-button:hover {
+    background: #0077ed;
 }
 
-a {
-    color: #7da87b;
-    font-size: 18px;
+.secondary-button {
+    background: white;
+    color: #0071e3;
+    border: 1px solid #d2d2d7;
+    border-radius: 980px;
+    padding: 16px 34px;
+    font-size: 19px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.secondary-button:hover {
+    background: #fbfbfd;
 }
