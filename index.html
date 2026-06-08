@@ -1,74 +1,23 @@
-* {
-    box-sizing: border-box;
-}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Memory Match</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 
-body {
-    margin: 0;
-    background: #f5f5f7;
-    color: #1d1d1f;
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        "SF Pro Text",
-        sans-serif;
-}
+<body>
+    <main class="hero">
+        <h1>Memory Match</h1>
 
-.container {
-    max-width: 900px;
-    margin: 120px auto;
-    padding: 0 40px;
-    text-align: center;
-}
+        <p>
+            A simple, personalized matching game for faces,
+            names, places, and meaningful memories.
+        </p>
 
-h1 {
-    font-size: 72px;
-    font-weight: 700;
-    letter-spacing: -0.04em;
-    margin-bottom: 20px;
-}
-
-p {
-    font-size: 28px;
-    color: #6e6e73;
-    line-height: 1.4;
-    max-width: 700px;
-    margin: 0 auto 60px auto;
-}
-
-.buttons {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.primary-button {
-    background: #0071e3;
-    color: white;
-    border: none;
-    border-radius: 980px;
-    padding: 16px 34px;
-    font-size: 19px;
-    font-weight: 500;
-    cursor: pointer;
-}
-
-.primary-button:hover {
-    background: #0077ed;
-}
-
-.secondary-button {
-    background: white;
-    color: #0071e3;
-    border: 1px solid #d2d2d7;
-    border-radius: 980px;
-    padding: 16px 34px;
-    font-size: 19px;
-    font-weight: 500;
-    cursor: pointer;
-}
-
-.secondary-button:hover {
-    background: #fbfbfd;
-}
+        <div class="buttons">
+            <button onclick="location.href='play.html'">Start Playing</button>
+            <button class="secondary" onclick="location.href='setup.html'">Setup</button>
+        </div>
+    </main>
+</body>
+</html>
