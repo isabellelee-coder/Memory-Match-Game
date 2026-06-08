@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body onload="loadData('guided')">
     <main class="page">
         <h1>Guided</h1>
 
@@ -13,7 +13,11 @@
             Memory and Description
         </p>
 
+        <div id="savedData" class="saved-box"></div>
+
         <button class="secondary" onclick="location.href='play.html'">Back</button>
     </main>
+
+    <script src="script.js"></script>
 </body>
 </html>
