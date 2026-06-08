@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Challenge | Memory Match</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body onload="loadExistingData('challenge')">
+    <main class="page">
+        <h1>Edit Challenge</h1>
+
+        <p class="subtitle">
+            Add names, facts, things, and activities the person likes.
+        </p>
+
+        <textarea id="dataInput" placeholder="Example: Grandpa - likes fishing"></textarea>
+
+        <button onclick="saveData('challenge')">Save</button>
+        <button class="secondary" onclick="location.href='setup.html'">Back</button>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
