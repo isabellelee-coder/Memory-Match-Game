@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Guided | Memory Match</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body onload="loadExistingData('guided')">
+    <main class="page">
+        <h1>Edit Guided</h1>
+
+        <p class="subtitle">
+            Add memories and descriptions.
+        </p>
+
+        <textarea id="dataInput" placeholder="Example: We went here every summer - Lake Tahoe"></textarea>
+
+        <button onclick="saveData('guided')">Save</button>
+        <button class="secondary" onclick="location.href='setup.html'">Back</button>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
