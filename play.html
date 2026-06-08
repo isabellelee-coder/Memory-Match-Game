@@ -1,13 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Play</title>
+    <title>Play | Memory Match</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <h1>Play Page</h1>
+    <main class="page">
+        <section class="card">
+            <h1>Choose a Level</h1>
 
-    <p>This page will later contain the memory game.</p>
+            <p class="subtitle">
+                Start with the level that feels comfortable. You can change it anytime.
+            </p>
 
-    <a href="index.html">Back Home</a>
+            <div class="level-grid">
+                <button class="level-button">
+                    <span>Gentle</span>
+                    <small>2 choices · extra support</small>
+                </button>
+
+                <button class="level-button">
+                    <span>Guided</span>
+                    <small>3 choices · balanced</small>
+                </button>
+
+                <button class="level-button">
+                    <span>Challenge</span>
+                    <small>4 choices · more independent</small>
+                </button>
+            </div>
+
+            <div class="buttons">
+                <button class="secondary" onclick="location.href='index.html'">Home</button>
+                <button class="secondary" onclick="location.href='setup.html'">Setup</button>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
