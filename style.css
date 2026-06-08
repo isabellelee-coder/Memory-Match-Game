@@ -66,3 +66,61 @@ button.secondary {
     color: #0071e3;
     border: 1px solid #d2d2d7;
 }
+.level-grid {
+    width: min(100%, 760px);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 48px;
+}
+
+.level-card {
+    background: #f5f5f7;
+    border: 1px solid #e5e5ea;
+    border-radius: 28px;
+    padding: 28px 22px;
+    text-align: center;
+}
+
+.level-card h2 {
+    margin: 0 0 12px;
+    font-size: 28px;
+    letter-spacing: -0.03em;
+}
+
+.level-card p {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.4;
+    color: #6e6e73;
+}
+
+.level-button {
+    min-height: 150px;
+    border-radius: 30px;
+    padding: 28px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.level-button span {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+}
+
+.level-button small {
+    font-size: 17px;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+@media (max-width: 800px) {
+    .level-grid {
+        grid-template-columns: 1fr;
+    }
+}
