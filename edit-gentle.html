@@ -1,24 +1,145 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Edit Gentle | Memory Match</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body onload="loadExistingData('gentle')">
-    <main class="page">
+<body onload="loadMatchingGameSetup('gentle')">
+    <main class="setup-game-page">
         <h1>Edit Gentle</h1>
 
         <p class="subtitle">
-            Add names, faces, and relationships.
+            Create up to six matching pairs.
         </p>
 
-        <textarea id="dataInput" placeholder="Example: Grandma - photo of Grandma"></textarea>
+        <button
+            id="instructions-button"
+            type="button"
+            class="instructions-toggle"
+            aria-expanded="false"
+            onclick="toggleInstructions()"
+        >
+            How to create matching pairs
+        </button>
 
-        <button onclick="saveData('gentle')">Save</button>
-        <button class="secondary" onclick="location.href='setup.html'">Back</button>
+        <section
+            id="setup-instructions"
+            class="setup-instructions-panel"
+        >
+            <h2>How Setup Works</h2>
+
+            <ol>
+                <li>
+                    Type or add a photo for the first item.
+                </li>
+
+                <li>
+                    Place its matching item directly beneath it.
+                </li>
+
+                <li>
+                    Each vertical column is one matching pair.
+                </li>
+
+                <li>
+                    Repeat this for up to six pairs.
+                </li>
+
+                <li>
+                    Select <strong>Save Game</strong> when finished.
+                </li>
+            </ol>
+
+            <div class="instruction-example">
+                <div class="example-card">
+                    Photo of Grandma
+                </div>
+
+                <span class="example-arrow">↕</span>
+
+                <div class="example-card">
+                    Grandma
+                </div>
+            </div>
+
+            <p>
+                The items will be shuffled when the player begins the game.
+            </p>
+        </section>
+
+        <section class="setup-board">
+            <h2>First Items</h2>
+
+            <div
+                id="top-setup-row"
+                class="setup-card-row"
+            ></div>
+
+            <div
+                class="pair-arrows"
+                aria-hidden="true"
+            >
+                <span>↕</span>
+                <span>↕</span>
+                <span>↕</span>
+                <span>↕</span>
+                <span>↕</span>
+                <span>↕</span>
+            </div>
+
+            <h2>Matching Items</h2>
+
+            <div
+                id="bottom-setup-row"
+                class="setup-card-row"
+            ></div>
+        </section>
+
+        <p
+            id="save-message"
+            class="save-message"
+            aria-live="polite"
+        ></p>
+
+        <div class="setup-actions">
+            <button
+                type="button"
+                onclick="saveMatchingGame('gentle')"
+            >
+                Save Game
+            </button>
+
+            <button
+                type="button"
+                class="danger-button"
+                onclick="clearMatchingGame('gentle')"
+            >
+                Clear
+            </button>
+
+            <button
+                type="button"
+                class="secondary"
+                onclick="location.href='setup.html'"
+            >
+                Back
+            </button>
+        </div>
     </main>
 
     <script src="script.js"></script>
+
+    <script>
+        createSetupCards();
+    </script>
 </body>
 </html>
