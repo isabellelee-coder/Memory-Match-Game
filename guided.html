@@ -2,93 +2,134 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Guided | Memory Match</title>
 
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="game-pages.css">
 </head>
 
-<body onload="loadMatchingGame('guided')">
-    <main class="play-game-page">
-        <h1>Guided</h1>
+<body>
 
-        <p class="subtitle play-instructions">
+    <main class="mm-page" data-game-level="guided">
+
+        <header class="mm-page-header">
+
+            <a class="mm-back-link" href="play.html">
+                ← Back
+            </a>
+
+            <h1>Guided</h1>
+
+        </header>
+
+        <p class="mm-game-instruction">
             Select one item from each row to create a match.
+            Continue until every card has been matched.
         </p>
 
-        <p
-            id="game-progress"
-            class="game-progress"
-        ></p>
-
-        <p
-            id="game-feedback"
-            class="game-feedback"
-            aria-live="polite"
-        ></p>
-
-        <p
-            id="empty-game-message"
-            class="empty-game-message"
-            hidden
-        ></p>
-
-        <section
-            id="game-board"
-            class="game-board"
-        >
-            <svg
-                id="connection-lines"
-                class="connection-lines"
-                aria-hidden="true"
-            ></svg>
-
-            <div
-                id="top-card-row"
-                class="play-card-row"
-            ></div>
-
-            <div class="connection-space"></div>
-
-            <div
-                id="bottom-card-row"
-                class="play-card-row"
-            ></div>
-        </section>
-
-        <section
-            id="completion-box"
-            class="completion-box"
+        <div
+            class="mm-empty-message"
+            data-empty-message
             hidden
         >
-            <h2>Wonderful!</h2>
+            This level has not been set up yet. Go to
+            <a href="edit-guided.html">
+                <strong>Edit Guided</strong>
+            </a>
+            to add matching pairs first.
+        </div>
 
-            <p>
-                You found every matching pair.
-            </p>
+        <section data-game-area>
 
-            <button
-                type="button"
-                onclick="restartMatchingGame()"
+            <p
+                class="mm-progress"
+                data-progress
+            ></p>
+
+            <div class="mm-board-scroll">
+
+                <div
+                    class="mm-game-board"
+                    data-game-board
+                >
+
+                    <p class="mm-board-label">
+                        First items
+                    </p>
+
+                    <div
+                        class="mm-play-row"
+                        data-play-first-row
+                    ></div>
+
+                    <p
+                        class="mm-board-label"
+                        style="margin-top: 78px;"
+                    >
+                        Matching items
+                    </p>
+
+                    <div
+                        class="mm-play-row"
+                        data-play-match-row
+                    ></div>
+
+                    <svg
+                        class="mm-line-layer"
+                        aria-hidden="true"
+                    ></svg>
+
+                </div>
+
+            </div>
+
+            <section
+                class="mm-results"
+                data-results
+                hidden
+                aria-live="polite"
             >
-                Play Again
-            </button>
+
+                <h2>Results</h2>
+
+                <p
+                    class="mm-score"
+                    data-score
+                ></p>
+
+                <ul
+                    class="mm-result-list"
+                    data-result-list
+                ></ul>
+
+                <div class="mm-result-actions">
+
+                    <button
+                        class="mm-button mm-button-primary"
+                        type="button"
+                        data-try-again
+                    >
+                        Try Again
+                    </button>
+
+                    <a
+                        class="mm-button"
+                        href="play.html"
+                    >
+                        Back to Levels
+                    </a>
+
+                </div>
+
+            </section>
+
         </section>
 
-        <button
-            type="button"
-            class="secondary game-back-button"
-            onclick="location.href='play.html'"
-        >
-            Back
-        </button>
     </main>
 
-    <script src="script.js"></script>
+    <script src="memory-game.js"></script>
+
 </body>
 </html>
