@@ -1,39 +1,131 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Setup | Memory Match</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <main class="page">
-        <h1>Setup</h1>
 
-        <p class="subtitle">
-            This is where the family/friends of the user would set up the game.
-        </p>
+    <main class="page level-page">
 
-        <div class="level-info">
-            <div>
+        <a href="index.html" class="back-link">
+            ← Back
+        </a>
+
+        <section class="page-heading">
+
+            <p class="eyebrow">Memory Match</p>
+
+            <h1>Setup</h1>
+
+            <p class="page-description">
+                This is where the family and friends of the user
+                can personalize each memory-matching game.
+            </p>
+
+        </section>
+
+        <section class="level-grid">
+
+            <!-- Gentle -->
+            <article class="level-card">
+
+                <div class="level-icon">
+                    1
+                </div>
+
                 <h2>Gentle</h2>
-                <p>Name and faces/relationships</p>
-                <button class="small-button" onclick="location.href='edit-gentle.html'">Edit Gentle</button>
-            </div>
 
-            <div>
+                <p>
+                    Match familiar faces with their names or relationships.
+                </p>
+
+                <div class="level-example">
+                    <span>Example</span>
+                    <strong>Photo of Grandma ↕ Grandma</strong>
+                </div>
+
+                <a
+                    href="edit-gentle.html"
+                    class="level-button primary-level-button"
+                >
+                    Gentle Edit
+                </a>
+
+            </article>
+
+            <!-- Guided -->
+            <article class="level-card">
+
+                <div class="level-icon">
+                    2
+                </div>
+
                 <h2>Guided</h2>
-                <p>Memory and Description</p>
-                <button class="small-button" onclick="location.href='edit-guided.html'">Edit Guided</button>
-            </div>
 
-            <div>
+                <p>
+                    Match meaningful memories with descriptions,
+                    places, or important moments.
+                </p>
+
+                <div class="level-example">
+                    <span>Example</span>
+                    <strong>Family vacation ↕ Lake Tahoe</strong>
+                </div>
+
+                <a
+                    href="edit-guided.html"
+                    class="level-button primary-level-button"
+                >
+                    Guided Edit
+                </a>
+
+            </article>
+
+            <!-- Challenge -->
+            <article class="level-card">
+
+                <div class="level-icon">
+                    3
+                </div>
+
                 <h2>Challenge</h2>
-                <p>Name and fact/thing/activity that person</p>
-                <button class="small-button" onclick="location.href='edit-challenge.html'">Edit Challenge</button>
-            </div>
-        </div>
 
-        <button class="secondary" onclick="location.href='index.html'">Back</button>
+                <p>
+                    Match a person with a fact, favorite item,
+                    activity, or personal detail.
+                </p>
+
+                <div class="level-example">
+                    <span>Example</span>
+                    <strong>Grandpa ↕ Loves gardening</strong>
+                </div>
+
+                <a
+                    href="edit-challenge.html"
+                    class="level-button primary-level-button"
+                >
+                    Challenge Edit
+                </a>
+
+            </article>
+
+        </section>
+
+        <a href="index.html" class="bottom-back-button">
+            Back to Home
+        </a>
+
     </main>
+
 </body>
 </html>
