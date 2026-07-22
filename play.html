@@ -1,21 +1,96 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Play | Memory Match</title>
+
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="game-pages.css">
 </head>
 
 <body>
-    <main class="page">
-        <h1>Choose a Level</h1>
 
-        <div class="button-group">
-            <button onclick="location.href='gentle.html'">Gentle</button>
-            <button onclick="location.href='guided.html'">Guided</button>
-            <button onclick="location.href='challenge.html'">Challenge</button>
-        </div>
+    <main class="mm-page">
 
-        <button class="secondary" onclick="location.href='index.html'">Back</button>
+        <header class="mm-page-header">
+
+            <a class="mm-back-link" href="index.html">
+                ← Back
+            </a>
+
+            <h1>Choose a level</h1>
+
+        </header>
+
+        <section class="mm-level-picker" aria-label="Game levels">
+
+            <article class="mm-level-choice">
+
+                <div class="mm-level-choice-number">
+                    1
+                </div>
+
+                <h2>Gentle</h2>
+
+                <p>
+                    Match familiar faces with names or relationships.
+                </p>
+
+                <a
+                    class="mm-button mm-button-primary"
+                    href="gentle.html"
+                >
+                    Play Gentle
+                </a>
+
+            </article>
+
+            <article class="mm-level-choice">
+
+                <div class="mm-level-choice-number">
+                    2
+                </div>
+
+                <h2>Guided</h2>
+
+                <p>
+                    Match memories with descriptions, places, or moments.
+                </p>
+
+                <a
+                    class="mm-button mm-button-primary"
+                    href="guided.html"
+                >
+                    Play Guided
+                </a>
+
+            </article>
+
+            <article class="mm-level-choice">
+
+                <div class="mm-level-choice-number">
+                    3
+                </div>
+
+                <h2>Challenge</h2>
+
+                <p>
+                    Match people with facts, interests, or favorite activities.
+                </p>
+
+                <a
+                    class="mm-button mm-button-primary"
+                    href="challenge.html"
+                >
+                    Play Challenge
+                </a>
+
+            </article>
+
+        </section>
+
     </main>
+
 </body>
 </html>
