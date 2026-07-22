@@ -23,3 +23,17 @@
         margin-bottom: 22px;
     }
 }
+/* ===============================
+   Cover Page Logo
+================================= */
+
+.cover-logo {
+    width: 140px;
+    height: auto;
+
+    display: block;
+
+    margin: 0 auto 24px auto;
+
+    object-fit: contain;
+}
