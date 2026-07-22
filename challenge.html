@@ -1,21 +1,92 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Challenge | Memory Match</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body onload="loadData('challenge')">
-    <main class="page">
+<body onload="loadMatchingGame('challenge')">
+    <main class="play-game-page">
         <h1>Challenge</h1>
 
-        <p class="subtitle">
-            Name and fact/thing/activity that person
+        <p class="subtitle play-instructions">
+            Select one item from each row to create a match.
         </p>
 
-        <div id="savedData" class="saved-box"></div>
+        <p
+            id="game-progress"
+            class="game-progress"
+        ></p>
 
-        <button class="secondary" onclick="location.href='play.html'">Back</button>
+        <p
+            id="game-feedback"
+            class="game-feedback"
+            aria-live="polite"
+        ></p>
+
+        <p
+            id="empty-game-message"
+            class="empty-game-message"
+            hidden
+        ></p>
+
+        <section
+            id="game-board"
+            class="game-board"
+        >
+            <svg
+                id="connection-lines"
+                class="connection-lines"
+                aria-hidden="true"
+            ></svg>
+
+            <div
+                id="top-card-row"
+                class="play-card-row"
+            ></div>
+
+            <div class="connection-space"></div>
+
+            <div
+                id="bottom-card-row"
+                class="play-card-row"
+            ></div>
+        </section>
+
+        <section
+            id="completion-box"
+            class="completion-box"
+            hidden
+        >
+            <h2>Wonderful!</h2>
+
+            <p>
+                You found every matching pair.
+            </p>
+
+            <button
+                type="button"
+                onclick="restartMatchingGame()"
+            >
+                Play Again
+            </button>
+        </section>
+
+        <button
+            type="button"
+            class="secondary game-back-button"
+            onclick="location.href='play.html'"
+        >
+            Back
+        </button>
     </main>
 
     <script src="script.js"></script>
