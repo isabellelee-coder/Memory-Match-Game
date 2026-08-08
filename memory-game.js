@@ -1,6 +1,5 @@
 "use strict";
 
-
 /* =========================================================
    CATEGORY INFORMATION
 ========================================================= */
@@ -8,7 +7,6 @@
 const CATEGORIES = {
 
     memories: {
-
         title: "Memories",
 
         description:
@@ -21,9 +19,7 @@ const CATEGORIES = {
         ]
     },
 
-
     places: {
-
         title: "Places",
 
         description:
@@ -36,9 +32,7 @@ const CATEGORIES = {
         ]
     },
 
-
     people: {
-
         title: "People",
 
         description:
@@ -51,9 +45,7 @@ const CATEGORIES = {
         ]
     },
 
-
     favorites: {
-
         title: "Favorites",
 
         description:
@@ -66,9 +58,7 @@ const CATEGORIES = {
         ]
     },
 
-
     other: {
-
         title: "Other",
 
         description:
@@ -84,13 +74,11 @@ const CATEGORIES = {
 };
 
 
-
 /* =========================================================
    URL HELPERS
 ========================================================= */
 
 function getParams() {
-
     return new URLSearchParams(
         window.location.search
     );
@@ -98,25 +86,20 @@ function getParams() {
 
 
 function getCategoryFromUrl() {
-
     const category =
         getParams().get("category");
-
 
     if (CATEGORIES[category]) {
         return category;
     }
-
 
     return "other";
 }
 
 
 function getGameIdFromUrl() {
-
     return getParams().get("game");
 }
-
 
 
 /* =========================================================
@@ -124,45 +107,35 @@ function getGameIdFromUrl() {
 ========================================================= */
 
 function categoryStorageKey(category) {
-
     return `memoryMatch-category-${category}`;
 }
 
 
 function loadCategoryGames(category) {
-
     try {
-
         const raw =
             localStorage.getItem(
                 categoryStorageKey(category)
             );
 
-
         if (!raw) {
             return [];
         }
 
-
         const games =
             JSON.parse(raw);
-
 
         if (!Array.isArray(games)) {
             return [];
         }
 
-
         return games;
 
-
     } catch (error) {
-
         console.error(
             "Could not load games:",
             error
         );
-
 
         return [];
     }
@@ -173,7 +146,6 @@ function saveCategoryGames(
     category,
     games
 ) {
-
     localStorage.setItem(
         categoryStorageKey(category),
         JSON.stringify(games)
@@ -181,23 +153,20 @@ function saveCategoryGames(
 }
 
 
-
 /* =========================================================
    DATE
 ========================================================= */
 
 function formatCreatedDate(timestamp) {
-
     if (!timestamp) {
         return "Created recently";
     }
 
-
     const date =
         new Date(timestamp);
 
-
-    return "Created " +
+    return (
+        "Created " +
         date.toLocaleDateString(
             undefined,
             {
@@ -205,9 +174,9 @@ function formatCreatedDate(timestamp) {
                 day: "numeric",
                 year: "numeric"
             }
-        );
+        )
+    );
 }
-
 
 
 /* =========================================================
@@ -215,13 +184,10 @@ function formatCreatedDate(timestamp) {
 ========================================================= */
 
 function blankPairs() {
-
     return Array.from(
-
         { length: 6 },
 
         (_, index) => ({
-
             id: index,
 
             first: {
@@ -233,7 +199,6 @@ function blankPairs() {
                 text: "",
                 image: ""
             }
-
         })
     );
 }
@@ -242,13 +207,10 @@ function blankPairs() {
 function createGameObject(
     name = "Untitled Game"
 ) {
-
     const now =
         Date.now();
 
-
     return {
-
         id:
             `${now}-${Math.random()
                 .toString(36)
@@ -268,45 +230,34 @@ function createGameObject(
 }
 
 
-
 /* =========================================================
    GENERAL HELPERS
 ========================================================= */
 
 function escapeHtml(value) {
-
     return String(value)
-
         .replaceAll("&", "&amp;")
-
         .replaceAll("<", "&lt;")
-
         .replaceAll(">", "&gt;")
-
         .replaceAll('"', "&quot;")
-
         .replaceAll("'", "&#039;");
 }
 
 
 function shuffle(items) {
-
     const copy =
         [...items];
-
 
     for (
         let i = copy.length - 1;
         i > 0;
         i -= 1
     ) {
-
         const j =
             Math.floor(
                 Math.random() *
                 (i + 1)
             );
-
 
         [
             copy[i],
@@ -317,10 +268,8 @@ function shuffle(items) {
         ];
     }
 
-
     return copy;
 }
-
 
 
 /* =========================================================
@@ -328,7 +277,6 @@ function shuffle(items) {
 ========================================================= */
 
 function resizeImage(file) {
-
     return new Promise(
         (resolve, reject) => {
 
@@ -336,7 +284,6 @@ function resizeImage(file) {
                 !file ||
                 !file.type.startsWith("image/")
             ) {
-
                 reject(
                     new Error(
                         "Please choose an image file."
@@ -346,27 +293,20 @@ function resizeImage(file) {
                 return;
             }
 
-
             const reader =
                 new FileReader();
 
-
             reader.onload = () => {
-
                 const image =
                     new Image();
 
-
                 image.onload = () => {
-
                     const maxSide =
                         900;
-
 
                     const scale =
                         Math.min(
                             1,
-
                             maxSide /
                             Math.max(
                                 image.width,
@@ -374,34 +314,28 @@ function resizeImage(file) {
                             )
                         );
 
-
                     const width =
                         Math.max(
                             1,
-
                             Math.round(
                                 image.width *
                                 scale
                             )
                         );
 
-
                     const height =
                         Math.max(
                             1,
-
                             Math.round(
                                 image.height *
                                 scale
                             )
                         );
 
-
                     const canvas =
                         document.createElement(
                             "canvas"
                         );
-
 
                     canvas.width =
                         width;
@@ -409,12 +343,10 @@ function resizeImage(file) {
                     canvas.height =
                         height;
 
-
                     const context =
                         canvas.getContext(
                             "2d"
                         );
-
 
                     context.drawImage(
                         image,
@@ -424,7 +356,6 @@ function resizeImage(file) {
                         height
                     );
 
-
                     resolve(
                         canvas.toDataURL(
                             "image/jpeg",
@@ -433,9 +364,7 @@ function resizeImage(file) {
                     );
                 };
 
-
                 image.onerror = () => {
-
                     reject(
                         new Error(
                             "That image could not be opened."
@@ -443,21 +372,17 @@ function resizeImage(file) {
                     );
                 };
 
-
                 image.src =
                     reader.result;
             };
 
-
             reader.onerror = () => {
-
                 reject(
                     new Error(
                         "That image could not be read."
                     )
                 );
             };
-
 
             reader.readAsDataURL(
                 file
@@ -467,69 +392,56 @@ function resizeImage(file) {
 }
 
 
-
 /* =========================================================
    CATEGORY SETUP PAGE
 ========================================================= */
 
 function initCategorySetupPage() {
-
     const root =
         document.querySelector(
             "[data-category-setup-page]"
         );
 
-
     if (!root) {
         return;
     }
 
-
     const category =
         getCategoryFromUrl();
 
-
     const info =
         CATEGORIES[category];
-
 
     const title =
         root.querySelector(
             "[data-category-title]"
         );
 
-
     const description =
         root.querySelector(
             "[data-category-description]"
         );
-
 
     const exampleContainer =
         root.querySelector(
             "[data-category-examples]"
         );
 
-
     const gamesContainer =
         root.querySelector(
             "[data-saved-games]"
         );
-
 
     const noGames =
         root.querySelector(
             "[data-no-games]"
         );
 
-
     title.textContent =
         info.title;
 
-
     description.textContent =
         info.description;
-
 
     exampleContainer.innerHTML =
         info.examples
@@ -556,49 +468,49 @@ function initCategorySetupPage() {
 
             .join("");
 
-
     function renderGames() {
-
         const games =
             loadCategoryGames(
                 category
             );
 
-
         gamesContainer.innerHTML =
             "";
-
 
         noGames.hidden =
             games.length !== 0;
 
-
         games.forEach(
             game => {
+
+                if (!game.createdAt) {
+                    game.createdAt =
+                        game.updatedAt ||
+                        Date.now();
+                }
 
                 const card =
                     document.createElement(
                         "article"
                     );
 
-
                 card.className =
                     "mm-saved-game-card";
 
-
                 const completePairs =
-                    game.pairs.filter(
-                        pair =>
-                            (
-                                pair.first.text ||
-                                pair.first.image
-                            ) &&
-                            (
-                                pair.match.text ||
-                                pair.match.image
-                            )
-                    ).length;
-
+                    Array.isArray(game.pairs)
+                        ? game.pairs.filter(
+                            pair =>
+                                (
+                                    pair.first?.text ||
+                                    pair.first?.image
+                                ) &&
+                                (
+                                    pair.match?.text ||
+                                    pair.match?.image
+                                )
+                        ).length
+                        : 0;
 
                 card.innerHTML = `
 
@@ -637,7 +549,6 @@ function initCategorySetupPage() {
 
                 `;
 
-
                 gamesContainer.appendChild(
                     card
                 );
@@ -645,12 +556,13 @@ function initCategorySetupPage() {
         );
     }
 
-
-    root
-        .querySelector(
+    const createButton =
+        root.querySelector(
             "[data-create-game]"
-        )
-        .addEventListener(
+        );
+
+    if (createButton) {
+        createButton.addEventListener(
             "click",
             () => {
 
@@ -659,47 +571,40 @@ function initCategorySetupPage() {
                         "Name this game:"
                     );
 
-
                 if (
                     name === null
                 ) {
                     return;
                 }
 
-
                 const finalName =
                     name.trim() ||
                     "Untitled Game";
-
 
                 const games =
                     loadCategoryGames(
                         category
                     );
 
-
                 const game =
                     createGameObject(
                         finalName
                     );
 
-
                 games.push(
                     game
                 );
-
 
                 saveCategoryGames(
                     category,
                     games
                 );
 
-
                 window.location.href =
                     `edit-game.html?category=${category}&game=${game.id}`;
             }
         );
-
+    }
 
     root.addEventListener(
         "click",
@@ -710,26 +615,21 @@ function initCategorySetupPage() {
                     "[data-delete-game]"
                 );
 
-
             if (!button) {
                 return;
             }
 
-
             const gameId =
                 button.dataset.deleteGame;
-
 
             const confirmed =
                 window.confirm(
                     "Delete this game?"
                 );
 
-
             if (!confirmed) {
                 return;
             }
-
 
             const games =
                 loadCategoryGames(
@@ -740,21 +640,17 @@ function initCategorySetupPage() {
                         game.id !== gameId
                 );
 
-
             saveCategoryGames(
                 category,
                 games
             );
 
-
             renderGames();
         }
     );
 
-
     renderGames();
 }
-
 
 
 /* =========================================================
@@ -766,19 +662,23 @@ function makeEditorCard(
     side,
     item
 ) {
-
     const sideName =
         side === "first"
             ? "First item"
             : "Matching item";
 
+    const safeItem =
+        item || {
+            text: "",
+            image: ""
+        };
 
     const imageMarkup =
-        item.image
+        safeItem.image
 
             ? `
                 <img
-                    src="${item.image}"
+                    src="${safeItem.image}"
                     alt="${sideName} photo"
                 >
             `
@@ -788,7 +688,6 @@ function makeEditorCard(
                     Add an optional photo
                 </div>
             `;
-
 
     return `
 
@@ -802,7 +701,6 @@ function makeEditorCard(
                 ${pairIndex + 1}
             </span>
 
-
             <div
                 class="mm-photo-preview"
                 data-preview
@@ -810,15 +708,13 @@ function makeEditorCard(
                 ${imageMarkup}
             </div>
 
-
             <textarea
                 class="mm-text-input"
                 rows="2"
                 maxlength="160"
                 placeholder="Type the ${sideName.toLowerCase()} here"
                 data-text-input
-            >${escapeHtml(item.text)}</textarea>
-
+            >${escapeHtml(safeItem.text || "")}</textarea>
 
             <div class="mm-photo-controls">
 
@@ -833,7 +729,6 @@ function makeEditorCard(
                     >
 
                 </label>
-
 
                 <button
                     class="mm-remove-photo"
@@ -851,37 +746,30 @@ function makeEditorCard(
 }
 
 
-
 /* =========================================================
    GAME EDITOR
 ========================================================= */
 
 function initGameEditor() {
-
     const root =
         document.querySelector(
             "[data-game-editor]"
         );
 
-
     if (!root) {
         return;
     }
 
-
     const category =
         getCategoryFromUrl();
 
-
     const gameId =
         getGameIdFromUrl();
-
 
     let games =
         loadCategoryGames(
             category
         );
-
 
     let game =
         games.find(
@@ -890,15 +778,11 @@ function initGameEditor() {
                 gameId
         );
 
-
     if (!game) {
-
         game =
             createGameObject();
 
-
         games.push(game);
-
 
         saveCategoryGames(
             category,
@@ -906,22 +790,18 @@ function initGameEditor() {
         );
     }
 
-
     if (
         !Array.isArray(
             game.pairs
         )
     ) {
-
         game.pairs =
             blankPairs();
     }
 
-
     while (
         game.pairs.length < 6
     ) {
-
         game.pairs.push(
             blankPairs()[
                 game.pairs.length
@@ -929,42 +809,41 @@ function initGameEditor() {
         );
     }
 
-
     const backUrl =
         `category.html?category=${category}`;
 
-
-    root
-        .querySelector(
+    const editorBack =
+        root.querySelector(
             "[data-editor-back]"
-        )
-        .href =
-            backUrl;
+        );
 
-
-    root
-        .querySelector(
+    const bottomBack =
+        root.querySelector(
             "[data-bottom-back]"
-        )
-        .href =
-            backUrl;
+        );
 
+    if (editorBack) {
+        editorBack.href =
+            backUrl;
+    }
+
+    if (bottomBack) {
+        bottomBack.href =
+            backUrl;
+    }
 
     const nameInput =
         root.querySelector(
             "[data-game-name]"
         );
 
-
     nameInput.value =
         game.name;
-
 
     const exampleContainer =
         root.querySelector(
             "[data-editor-examples]"
         );
-
 
     exampleContainer.innerHTML =
         CATEGORIES[category]
@@ -992,27 +871,22 @@ function initGameEditor() {
 
             .join("");
 
-
     const firstRow =
         root.querySelector(
             "[data-first-row]"
         );
-
 
     const matchRow =
         root.querySelector(
             "[data-match-row]"
         );
 
-
     const status =
         root.querySelector(
             "[data-status]"
         );
 
-
     function render() {
-
         firstRow.innerHTML =
             game.pairs
 
@@ -1026,7 +900,6 @@ function initGameEditor() {
                 )
 
                 .join("");
-
 
         matchRow.innerHTML =
             game.pairs
@@ -1043,7 +916,6 @@ function initGameEditor() {
                 .join("");
     }
 
-
     root.addEventListener(
         "input",
         event => {
@@ -1053,41 +925,33 @@ function initGameEditor() {
                     "[data-text-input]"
                 );
 
-
             if (textInput) {
-
                 const card =
                     textInput.closest(
                         ".mm-editor-card"
                     );
-
 
                 const index =
                     Number(
                         card.dataset.pairIndex
                     );
 
-
                 const side =
                     card.dataset.side;
-
 
                 game.pairs[index][side].text =
                     textInput.value;
             }
 
-
             if (
                 event.target ===
                 nameInput
             ) {
-
                 game.name =
                     nameInput.value;
             }
         }
     );
-
 
     root.addEventListener(
         "change",
@@ -1098,7 +962,6 @@ function initGameEditor() {
                     "[data-image-input]"
                 );
 
-
             if (
                 !input ||
                 !input.files?.[0]
@@ -1106,34 +969,27 @@ function initGameEditor() {
                 return;
             }
 
-
             const card =
                 input.closest(
                     ".mm-editor-card"
                 );
-
 
             const index =
                 Number(
                     card.dataset.pairIndex
                 );
 
-
             const side =
                 card.dataset.side;
 
-
             try {
-
                 const image =
                     await resizeImage(
                         input.files[0]
                     );
 
-
                 game.pairs[index][side].image =
                     image;
-
 
                 card
                     .querySelector(
@@ -1148,24 +1004,19 @@ function initGameEditor() {
 
                     `;
 
-
                 status.textContent =
                     "Photo added. Press Save Game when you are finished.";
 
-
             } catch (error) {
-
                 window.alert(
                     error.message
                 );
             }
 
-
             input.value =
                 "";
         }
     );
-
 
     root.addEventListener(
         "click",
@@ -1176,28 +1027,22 @@ function initGameEditor() {
                     "[data-remove-image]"
                 );
 
-
             if (remove) {
-
                 const card =
                     remove.closest(
                         ".mm-editor-card"
                     );
-
 
                 const index =
                     Number(
                         card.dataset.pairIndex
                     );
 
-
                 const side =
                     card.dataset.side;
 
-
                 game.pairs[index][side].image =
                     "";
-
 
                 card
                     .querySelector(
@@ -1211,35 +1056,33 @@ function initGameEditor() {
 
                     `;
 
-
                 status.textContent =
                     "Photo removed. Press Save Game to keep the change.";
 
-
                 return;
             }
-
 
             if (
                 event.target.closest(
                     "[data-save-game]"
                 )
             ) {
-
                 game.name =
                     nameInput.value.trim() ||
                     "Untitled Game";
 
-
                 game.updatedAt =
                     Date.now();
 
+                if (!game.createdAt) {
+                    game.createdAt =
+                        Date.now();
+                }
 
                 games =
                     loadCategoryGames(
                         category
                     );
-
 
                 const gameIndex =
                     games.findIndex(
@@ -1248,73 +1091,56 @@ function initGameEditor() {
                             game.id
                     );
 
-
                 if (
                     gameIndex >= 0
                 ) {
-
                     games[gameIndex] =
                         game;
-
                 } else {
-
                     games.push(
                         game
                     );
                 }
 
-
                 try {
-
                     saveCategoryGames(
                         category,
                         games
                     );
 
-
                     status.textContent =
                         "Game saved successfully.";
 
-
                 } catch (error) {
-
                     console.error(
                         error
                     );
-
 
                     status.textContent =
                         "The game could not be saved. Try using smaller photos.";
                 }
 
-
                 return;
             }
-
 
             if (
                 event.target.closest(
                     "[data-clear-game]"
                 )
             ) {
-
                 const confirmed =
                     window.confirm(
                         "Clear all six matching pairs?"
                     );
 
-
                 if (!confirmed) {
                     return;
                 }
 
-
                 game.pairs =
                     blankPairs();
 
-
                 render();
-
 
                 status.textContent =
                     "All matching pairs were cleared. Press Save Game to keep the change.";
@@ -1322,10 +1148,8 @@ function initGameEditor() {
         }
     );
 
-
     render();
 }
-
 
 
 /* =========================================================
@@ -1333,21 +1157,17 @@ function initGameEditor() {
 ========================================================= */
 
 function initPlayCategoryPage() {
-
     const root =
         document.querySelector(
             "[data-play-category-page]"
         );
 
-
     if (!root) {
         return;
     }
 
-
     const category =
         getCategoryFromUrl();
-
 
     root
         .querySelector(
@@ -1356,28 +1176,23 @@ function initPlayCategoryPage() {
         .textContent =
             CATEGORIES[category].title;
 
-
     const container =
         root.querySelector(
             "[data-play-games]"
         );
-
 
     const empty =
         root.querySelector(
             "[data-no-play-games]"
         );
 
-
     const games =
         loadCategoryGames(
             category
         );
 
-
     empty.hidden =
         games.length > 0;
-
 
     container.innerHTML =
         games
@@ -1385,19 +1200,26 @@ function initPlayCategoryPage() {
             .map(
                 game => {
 
-                    const count =
-                        game.pairs.filter(
-                            pair =>
-                                (
-                                    pair.first.text ||
-                                    pair.first.image
-                                ) &&
-                                (
-                                    pair.match.text ||
-                                    pair.match.image
-                                )
-                        ).length;
+                    if (!game.createdAt) {
+                        game.createdAt =
+                            game.updatedAt ||
+                            Date.now();
+                    }
 
+                    const count =
+                        Array.isArray(game.pairs)
+                            ? game.pairs.filter(
+                                pair =>
+                                    (
+                                        pair.first?.text ||
+                                        pair.first?.image
+                                    ) &&
+                                    (
+                                        pair.match?.text ||
+                                        pair.match?.image
+                                    )
+                            ).length
+                            : 0;
 
                     return `
 
@@ -1434,7 +1256,6 @@ function initPlayCategoryPage() {
 }
 
 
-
 /* =========================================================
    PLAY CARDS
 ========================================================= */
@@ -1444,11 +1265,9 @@ function makePlayCard(
     rowName,
     index
 ) {
-
     const text =
         item.text.trim() ||
         "Photo";
-
 
     const imageMarkup =
         item.image
@@ -1467,7 +1286,6 @@ function makePlayCard(
             `
 
             : "";
-
 
     return `
 
@@ -1492,7 +1310,6 @@ function makePlayCard(
 }
 
 
-
 /* =========================================================
    PLAY CONNECTION LINES
 ========================================================= */
@@ -1502,31 +1319,25 @@ function drawMatchLines(
     choices,
     showResults = false
 ) {
-
     const svg =
         board.querySelector(
             ".mm-line-layer"
         );
 
-
     if (!svg) {
         return;
     }
 
-
     const rect =
         board.getBoundingClientRect();
-
 
     svg.setAttribute(
         "viewBox",
         `0 0 ${rect.width} ${rect.height}`
     );
 
-
     svg.innerHTML =
         "";
-
 
     choices.forEach(
         choice => {
@@ -1536,12 +1347,10 @@ function drawMatchLines(
                     `[data-card-key="${choice.firstKey}"]`
                 );
 
-
             const match =
                 board.querySelector(
                     `[data-card-key="${choice.matchKey}"]`
                 );
-
 
             if (
                 !first ||
@@ -1550,41 +1359,33 @@ function drawMatchLines(
                 return;
             }
 
-
             const firstRect =
                 first.getBoundingClientRect();
 
-
             const matchRect =
                 match.getBoundingClientRect();
-
 
             const x1 =
                 firstRect.left -
                 rect.left +
                 firstRect.width / 2;
 
-
             const y1 =
                 firstRect.bottom -
                 rect.top;
-
 
             const x2 =
                 matchRect.left -
                 rect.left +
                 matchRect.width / 2;
 
-
             const y2 =
                 matchRect.top -
                 rect.top;
 
-
             const correct =
                 choice.firstPairId ===
                 choice.matchPairId;
-
 
             const color =
                 showResults
@@ -1597,18 +1398,15 @@ function drawMatchLines(
 
                     : "rgba(0,113,227,0.68)";
 
-
             const middleY =
                 (y1 + y2) /
                 2;
-
 
             const path =
                 document.createElementNS(
                     "http://www.w3.org/2000/svg",
                     "path"
                 );
-
 
             path.setAttribute(
                 "d",
@@ -1619,30 +1417,25 @@ function drawMatchLines(
                    ${x2} ${y2}`
             );
 
-
             path.setAttribute(
                 "fill",
                 "none"
             );
-
 
             path.setAttribute(
                 "stroke",
                 color
             );
 
-
             path.setAttribute(
                 "stroke-width",
                 "4"
             );
 
-
             path.setAttribute(
                 "stroke-linecap",
                 "round"
             );
-
 
             svg.appendChild(
                 path
@@ -1652,37 +1445,30 @@ function drawMatchLines(
 }
 
 
-
 /* =========================================================
    ACTUAL GAME
 ========================================================= */
 
 function initGamePage() {
-
     const root =
         document.querySelector(
             "[data-game-page]"
         );
 
-
     if (!root) {
         return;
     }
 
-
     const category =
         getCategoryFromUrl();
 
-
     const gameId =
         getGameIdFromUrl();
-
 
     const games =
         loadCategoryGames(
             category
         );
-
 
     const game =
         games.find(
@@ -1691,36 +1477,36 @@ function initGamePage() {
                 gameId
         );
 
-
     const categoryBack =
         `play-category.html?category=${category}`;
 
-
-    root
-        .querySelector(
+    const gameBack =
+        root.querySelector(
             "[data-game-back]"
-        )
-        .href =
-            categoryBack;
+        );
 
-
-    root
-        .querySelector(
+    const resultsBack =
+        root.querySelector(
             "[data-results-back]"
-        )
-        .href =
-            categoryBack;
+        );
 
+    if (gameBack) {
+        gameBack.href =
+            categoryBack;
+    }
+
+    if (resultsBack) {
+        resultsBack.href =
+            categoryBack;
+    }
 
     if (!game) {
-
         root
             .querySelector(
                 "[data-game-area]"
             )
             .hidden =
                 true;
-
 
         root
             .querySelector(
@@ -1729,10 +1515,8 @@ function initGamePage() {
             .hidden =
                 false;
 
-
         return;
     }
-
 
     root
         .querySelector(
@@ -1741,32 +1525,30 @@ function initGamePage() {
         .textContent =
             game.name;
 
-
     const validPairs =
-        game.pairs.filter(
-            pair =>
-                (
-                    pair.first.text ||
-                    pair.first.image
-                ) &&
-                (
-                    pair.match.text ||
-                    pair.match.image
-                )
-        );
-
+        Array.isArray(game.pairs)
+            ? game.pairs.filter(
+                pair =>
+                    (
+                        pair.first?.text ||
+                        pair.first?.image
+                    ) &&
+                    (
+                        pair.match?.text ||
+                        pair.match?.image
+                    )
+            )
+            : [];
 
     if (
         validPairs.length === 0
     ) {
-
         root
             .querySelector(
                 "[data-game-area]"
             )
             .hidden =
                 true;
-
 
         root
             .querySelector(
@@ -1775,10 +1557,8 @@ function initGamePage() {
             .hidden =
                 false;
 
-
         return;
     }
-
 
     const firstItems =
         shuffle(
@@ -1791,7 +1571,6 @@ function initGamePage() {
             )
         );
 
-
     const matchingItems =
         shuffle(
             validPairs.map(
@@ -1803,18 +1582,15 @@ function initGamePage() {
             )
         );
 
-
     const firstRow =
         root.querySelector(
             "[data-play-first-row]"
         );
 
-
     const matchRow =
         root.querySelector(
             "[data-play-match-row]"
         );
-
 
     firstRow.innerHTML =
         firstItems
@@ -1830,7 +1606,6 @@ function initGamePage() {
 
             .join("");
 
-
     matchRow.innerHTML =
         matchingItems
 
@@ -1845,58 +1620,46 @@ function initGamePage() {
 
             .join("");
 
-
     const board =
         root.querySelector(
             "[data-game-board]"
         );
-
 
     const progress =
         root.querySelector(
             "[data-progress]"
         );
 
-
     const results =
         root.querySelector(
             "[data-results]"
         );
-
 
     const score =
         root.querySelector(
             "[data-score]"
         );
 
-
     const resultList =
         root.querySelector(
             "[data-result-list]"
         );
 
-
     let selectedFirst =
         null;
-
 
     let selectedMatch =
         null;
 
-
     const choices =
         [];
 
-
     function updateProgress() {
-
         progress.textContent =
             `${choices.length} of ${validPairs.length} matches selected`;
     }
 
-
     function makeChoice() {
-
         if (
             !selectedFirst ||
             !selectedMatch
@@ -1904,9 +1667,7 @@ function initGamePage() {
             return;
         }
 
-
         const choice = {
-
             firstKey:
                 selectedFirst.dataset.cardKey,
 
@@ -1938,13 +1699,11 @@ function initGamePage() {
                     .textContent
         };
 
-
         selectedFirst
             .classList
             .remove(
                 "is-selected"
             );
-
 
         selectedMatch
             .classList
@@ -1952,70 +1711,56 @@ function initGamePage() {
                 "is-selected"
             );
 
-
         selectedFirst
             .classList
             .add(
                 "is-used"
             );
 
-
         selectedMatch
             .classList
             .add(
                 "is-used"
             );
-
 
         selectedFirst.disabled =
             true;
 
-
         selectedMatch.disabled =
             true;
-
 
         choices.push(
             choice
         );
 
-
         selectedFirst =
             null;
-
 
         selectedMatch =
             null;
 
-
         updateProgress();
-
 
         drawMatchLines(
             board,
             choices
         );
 
-
         if (
             choices.length ===
             validPairs.length
         ) {
-
             showResults();
         }
     }
 
-
     function showResults() {
-
         const correct =
             choices.filter(
                 choice =>
                     choice.firstPairId ===
                     choice.matchPairId
             ).length;
-
 
         choices.forEach(
             choice => {
@@ -2024,25 +1769,21 @@ function initGamePage() {
                     choice.firstPairId ===
                     choice.matchPairId;
 
-
                 const first =
                     board.querySelector(
                         `[data-card-key="${choice.firstKey}"]`
                     );
-
 
                 const match =
                     board.querySelector(
                         `[data-card-key="${choice.matchKey}"]`
                     );
 
-
                 first.classList.add(
                     isCorrect
                         ? "is-correct"
                         : "is-wrong"
                 );
-
 
                 match.classList.add(
                     isCorrect
@@ -2052,17 +1793,14 @@ function initGamePage() {
             }
         );
 
-
         drawMatchLines(
             board,
             choices,
             true
         );
 
-
         score.textContent =
             `You matched ${correct} out of ${validPairs.length} correctly.`;
-
 
         resultList.innerHTML =
             choices
@@ -2073,7 +1811,6 @@ function initGamePage() {
                         const isCorrect =
                             choice.firstPairId ===
                             choice.matchPairId;
-
 
                         return `
 
@@ -2113,10 +1850,8 @@ function initGamePage() {
 
                 .join("");
 
-
         results.hidden =
             false;
-
 
         results.scrollIntoView({
             behavior:
@@ -2127,7 +1862,6 @@ function initGamePage() {
         });
     }
 
-
     root.addEventListener(
         "click",
         event => {
@@ -2137,72 +1871,58 @@ function initGamePage() {
                     "[data-play-card]"
                 );
 
-
             if (
                 card &&
                 !card.disabled
             ) {
-
                 if (
                     card.dataset.row ===
                     "first"
                 ) {
-
                     selectedFirst
                         ?.classList
                         .remove(
                             "is-selected"
                         );
 
-
                     selectedFirst =
                         card;
-
 
                     card.classList.add(
                         "is-selected"
                     );
 
-
                 } else {
-
                     selectedMatch
                         ?.classList
                         .remove(
                             "is-selected"
                         );
 
-
                     selectedMatch =
                         card;
-
 
                     card.classList.add(
                         "is-selected"
                     );
                 }
 
-
                 makeChoice();
             }
-
 
             if (
                 event.target.closest(
                     "[data-try-again]"
                 )
             ) {
-
                 window.location.reload();
             }
         }
     );
 
-
     window.addEventListener(
         "resize",
         () => {
-
             drawMatchLines(
                 board,
                 choices,
@@ -2211,10 +1931,8 @@ function initGamePage() {
         }
     );
 
-
     updateProgress();
 }
-
 
 
 /* =========================================================
