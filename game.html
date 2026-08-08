@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Memory Match</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="game-pages.css">
+</head>
+
+<body>
+
+    <main
+        class="mm-page"
+        data-game-page
+    >
+
+        <header class="mm-page-header">
+
+            <a
+                class="mm-back-link"
+                href="#"
+                data-game-back
+            >
+                ← Back
+            </a>
+
+            <h1 data-game-title>
+                Memory Match
+            </h1>
+
+        </header>
+
+
+        <p class="mm-game-instruction">
+            Select one item from each row to create a match.
+            Continue until every card has been matched.
+        </p>
+
+
+        <div
+            class="mm-empty-message"
+            data-empty-game
+            hidden
+        >
+            This game does not contain any complete matching pairs yet.
+        </div>
+
+
+        <section data-game-area>
+
+            <p
+                class="mm-progress"
+                data-progress
+            ></p>
+
+
+            <div class="mm-board-scroll">
+
+                <div
+                    class="mm-game-board"
+                    data-game-board
+                >
+
+                    <p class="mm-board-label">
+                        First items
+                    </p>
+
+                    <div
+                        class="mm-play-row"
+                        data-play-first-row
+                    ></div>
+
+
+                    <p class="mm-board-label mm-play-matching-label">
+                        Matching items
+                    </p>
+
+                    <div
+                        class="mm-play-row"
+                        data-play-match-row
+                    ></div>
+
+
+                    <svg
+                        class="mm-line-layer"
+                        aria-hidden="true"
+                    ></svg>
+
+                </div>
+
+            </div>
+
+
+            <section
+                class="mm-results"
+                data-results
+                hidden
+                aria-live="polite"
+            >
+
+                <h2>Results</h2>
+
+                <p
+                    class="mm-score"
+                    data-score
+                ></p>
+
+
+                <ul
+                    class="mm-result-list"
+                    data-result-list
+                ></ul>
+
+
+                <div class="mm-result-actions">
+
+                    <button
+                        class="mm-button mm-button-primary"
+                        type="button"
+                        data-try-again
+                    >
+                        Try Again
+                    </button>
+
+                    <a
+                        class="mm-button"
+                        href="#"
+                        data-results-back
+                    >
+                        Back
+                    </a>
+
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
+
+
+    <script src="memory-game.js"></script>
+
+</body>
+</html>
