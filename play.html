@@ -2,7 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Play | Memory Match</title>
 
     <link rel="stylesheet" href="style.css">
@@ -15,75 +20,105 @@
 
         <header class="mm-page-header">
 
-            <a class="mm-back-link" href="index.html">
+            <a
+                class="mm-back-link"
+                href="index.html"
+            >
                 ← Back
             </a>
 
-            <h1>Choose a level</h1>
+            <h1>Choose a Category</h1>
 
         </header>
 
-        <section class="mm-level-picker" aria-label="Game levels">
+
+        <section class="mm-category-grid">
 
             <article class="mm-level-choice">
 
-                <div class="mm-level-choice-number">
-                    1
+                <div class="mm-category-icon">
+                    M
                 </div>
 
-                <h2>Gentle</h2>
-
-                <p>
-                    Match familiar faces with names or relationships.
-                </p>
+                <h2>Memories</h2>
 
                 <a
                     class="mm-button mm-button-primary"
-                    href="gentle.html"
+                    href="play-category.html?category=memories"
                 >
-                    Play Gentle
+                    Memories
                 </a>
 
             </article>
 
+
             <article class="mm-level-choice">
 
-                <div class="mm-level-choice-number">
-                    2
+                <div class="mm-category-icon">
+                    P
                 </div>
 
-                <h2>Guided</h2>
-
-                <p>
-                    Match memories with descriptions, places, or moments.
-                </p>
+                <h2>Places</h2>
 
                 <a
                     class="mm-button mm-button-primary"
-                    href="guided.html"
+                    href="play-category.html?category=places"
                 >
-                    Play Guided
+                    Places
                 </a>
 
             </article>
 
+
             <article class="mm-level-choice">
 
-                <div class="mm-level-choice-number">
-                    3
+                <div class="mm-category-icon">
+                    P
                 </div>
 
-                <h2>Challenge</h2>
-
-                <p>
-                    Match people with facts, interests, or favorite activities.
-                </p>
+                <h2>People</h2>
 
                 <a
                     class="mm-button mm-button-primary"
-                    href="challenge.html"
+                    href="play-category.html?category=people"
                 >
-                    Play Challenge
+                    People
+                </a>
+
+            </article>
+
+
+            <article class="mm-level-choice">
+
+                <div class="mm-category-icon">
+                    F
+                </div>
+
+                <h2>Favorites</h2>
+
+                <a
+                    class="mm-button mm-button-primary"
+                    href="play-category.html?category=favorites"
+                >
+                    Favorites
+                </a>
+
+            </article>
+
+
+            <article class="mm-level-choice">
+
+                <div class="mm-category-icon">
+                    +
+                </div>
+
+                <h2>Other</h2>
+
+                <a
+                    class="mm-button mm-button-primary"
+                    href="play-category.html?category=other"
+                >
+                    Other
                 </a>
 
             </article>
