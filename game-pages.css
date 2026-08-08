@@ -1,864 +1,2153 @@
 /* =========================================================
-   Memory Match — Setup editor and play pages only
-   This file is loaded AFTER style.css so the homepage style
-   and the main Setup page remain unchanged.
+   MEMORY MATCH
+   Category, editor, and gameplay pages
 ========================================================= */
 
 :root {
-    --mm-text: #1d1d1f;
-    --mm-muted: #6e6e73;
-    --mm-blue: #0071e3;
-    --mm-green: #248a3d;
-    --mm-red: #d70015;
-    --mm-panel: rgba(255, 255, 255, 0.9);
-    --mm-border: rgba(0, 0, 0, 0.08);
-    --mm-shadow: 0 16px 42px rgba(0, 0, 0, 0.09);
+
+    --mm-text:
+        #1d1d1f;
+
+    --mm-muted:
+        #6e6e73;
+
+    --mm-blue:
+        #0071e3;
+
+    --mm-green:
+        #248a3d;
+
+    --mm-red:
+        #d70015;
+
+    --mm-panel:
+        rgba(
+            255,
+            255,
+            255,
+            0.92
+        );
+
+    --mm-border:
+        rgba(
+            0,
+            0,
+            0,
+            0.08
+        );
+
+    --mm-shadow:
+        0 16px 42px
+        rgba(
+            0,
+            0,
+            0,
+            0.09
+        );
 }
+
+
+
+/* =========================================================
+   PAGE
+========================================================= */
 
 .mm-page {
-    width: min(100%, 1380px);
-    min-height: 100vh;
 
-    margin: 0 auto;
-    padding: 38px 34px 60px;
+    width:
+        min(
+            100%,
+            1380px
+        );
 
-    color: var(--mm-text);
+    min-height:
+        100vh;
+
+    margin:
+        0 auto;
+
+    padding:
+        38px
+        34px
+        60px;
+
+    color:
+        var(--mm-text);
 }
+
 
 .mm-page-header {
-    position: relative;
 
-    width: 100%;
-    max-width: 920px;
+    position:
+        relative;
 
-    margin: 0 auto 30px;
-    padding: 0 100px;
+    width:
+        100%;
 
-    text-align: center;
+    max-width:
+        920px;
+
+    margin:
+        0 auto
+        34px;
+
+    padding:
+        0 100px;
+
+    text-align:
+        center;
 }
+
 
 .mm-page-header h1 {
-    margin: 0 0 12px;
 
-    font-size: clamp(42px, 5vw, 64px);
-    line-height: 1.04;
-    letter-spacing: -0.045em;
+    margin:
+        0 0 12px;
+
+    font-size:
+        clamp(
+            42px,
+            5vw,
+            64px
+        );
+
+    line-height:
+        1.04;
+
+    letter-spacing:
+        -0.045em;
 }
+
 
 .mm-lead {
-    max-width: 720px;
 
-    margin: 0 auto;
+    max-width:
+        720px;
 
-    color: var(--mm-muted);
+    margin:
+        0 auto;
 
-    font-size: clamp(18px, 2vw, 22px);
-    line-height: 1.5;
+    color:
+        var(--mm-muted);
+
+    font-size:
+        clamp(
+            18px,
+            2vw,
+            22px
+        );
+
+    line-height:
+        1.5;
 }
+
+
+
+/* =========================================================
+   BACK
+========================================================= */
 
 .mm-back-link {
-    position: absolute;
-    top: 4px;
-    left: 0;
 
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    position:
+        absolute;
 
-    min-height: 46px;
+    top:
+        4px;
 
-    padding: 11px 18px;
+    left:
+        0;
 
-    border: 1px solid var(--mm-border);
-    border-radius: 999px;
+    min-height:
+        46px;
 
-    background: var(--mm-panel);
-    color: var(--mm-text);
+    padding:
+        11px 18px;
 
-    font-weight: 650;
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border:
+        1px solid
+        var(--mm-border);
+
+    border-radius:
+        999px;
+
+    background:
+        var(--mm-panel);
+
+    color:
+        var(--mm-text);
+
+    font-weight:
+        650;
 
     box-shadow:
-        0 9px 24px rgba(0, 0, 0, 0.07);
+        0 9px 24px
+        rgba(
+            0,
+            0,
+            0,
+            0.07
+        );
+}
 
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+
+
+/* =========================================================
+   CATEGORY CARDS
+
+   6-column invisible layout:
+   Top three each span 2 columns.
+   Bottom two are centered.
+========================================================= */
+
+.mm-category-grid {
+
+    width:
+        min(
+            100%,
+            980px
+        );
+
+    margin:
+        26px auto 0;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            6,
+            1fr
+        );
+
+    gap:
+        20px;
+}
+
+
+.mm-category-grid
+.mm-level-choice {
+
+    grid-column:
+        span 2;
+}
+
+
+.mm-category-grid
+.mm-level-choice:nth-child(4) {
+
+    grid-column:
+        2 / span 2;
+}
+
+
+.mm-category-grid
+.mm-level-choice:nth-child(5) {
+
+    grid-column:
+        4 / span 2;
+}
+
+
+.mm-level-choice {
+
+    min-height:
+        205px;
+
+    padding:
+        25px 23px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border:
+        1px solid
+        var(--mm-border);
+
+    border-radius:
+        25px;
+
+    background:
+        var(--mm-panel);
+
+    box-shadow:
+        var(--mm-shadow);
+
+    text-align:
+        center;
 
     transition:
-        transform 160ms ease,
-        box-shadow 160ms ease;
+        transform
+        170ms ease,
+        box-shadow
+        170ms ease;
 }
 
-.mm-back-link:hover {
-    transform: translateY(-2px);
+
+.mm-level-choice:hover {
+
+    transform:
+        translateY(-4px);
 
     box-shadow:
-        0 13px 30px rgba(0, 0, 0, 0.1);
+        0 21px 50px
+        rgba(
+            0,
+            0,
+            0,
+            0.12
+        );
 }
+
+
+.mm-level-choice h2 {
+
+    margin:
+        2px 0 10px;
+
+    font-size:
+        30px;
+}
+
+
+.mm-level-choice p {
+
+    margin:
+        0 0 20px;
+
+    color:
+        var(--mm-muted);
+
+    line-height:
+        1.5;
+}
+
+
+.mm-level-choice
+.mm-button {
+
+    width:
+        100%;
+
+    margin-top:
+        auto;
+}
+
+
+
+/* =========================================================
+   INFORMATION PANEL
+========================================================= */
 
 .mm-info-panel {
-    width: min(100%, 980px);
 
-    margin: 0 auto 34px;
-    padding: 28px;
+    width:
+        min(
+            100%,
+            980px
+        );
 
-    border: 1px solid var(--mm-border);
-    border-radius: 26px;
+    margin:
+        0 auto
+        34px;
 
-    background: var(--mm-panel);
+    padding:
+        28px;
 
-    box-shadow: var(--mm-shadow);
+    border:
+        1px solid
+        var(--mm-border);
 
-    text-align: center;
+    border-radius:
+        26px;
 
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    background:
+        var(--mm-panel);
+
+    box-shadow:
+        var(--mm-shadow);
+
+    text-align:
+        center;
 }
+
 
 .mm-info-panel h2 {
-    margin: 0 0 14px;
 
-    font-size: clamp(27px, 3.4vw, 38px);
+    margin:
+        0 0 14px;
+
+    font-size:
+        clamp(
+            27px,
+            3.4vw,
+            38px
+        );
 }
+
 
 .mm-info-panel > p {
-    max-width: 760px;
 
-    margin: 0 auto;
+    max-width:
+        760px;
 
-    color: var(--mm-muted);
+    margin:
+        0 auto;
 
-    font-size: 17px;
-    line-height: 1.6;
+    color:
+        var(--mm-muted);
+
+    font-size:
+        17px;
+
+    line-height:
+        1.6;
 }
+
+
+
+/* =========================================================
+   EXAMPLES
+========================================================= */
 
 .mm-example-grid {
-    width: min(100%, 860px);
 
-    margin: 24px auto 0;
+    width:
+        min(
+            100%,
+            860px
+        );
 
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 14px;
+    margin:
+        24px auto 0;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            1fr
+        );
+
+    gap:
+        14px;
 }
+
 
 .mm-example {
-    min-height: 112px;
 
-    padding: 17px;
+    min-height:
+        110px;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    padding:
+        17px;
 
-    border-radius: 18px;
+    display:
+        flex;
 
-    background: #f5f5f7;
+    flex-direction:
+        column;
 
-    text-align: center;
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        18px;
+
+    background:
+        #f5f5f7;
+
+    text-align:
+        center;
 }
+
 
 .mm-example span {
-    margin-bottom: 8px;
 
-    color: #86868b;
+    margin-bottom:
+        8px;
 
-    font-size: 12px;
-    font-weight: 750;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
+    color:
+        #86868b;
+
+    font-size:
+        12px;
+
+    font-weight:
+        750;
+
+    letter-spacing:
+        0.07em;
+
+    text-transform:
+        uppercase;
 }
+
 
 .mm-example strong {
-    font-size: 15px;
-    line-height: 1.45;
+
+    font-size:
+        15px;
+
+    line-height:
+        1.45;
 }
+
 
 .mm-note {
-    margin-top: 22px !important;
 
-    color: var(--mm-text) !important;
+    margin-top:
+        22px !important;
 
-    font-weight: 650;
+    color:
+        var(--mm-text) !important;
+
+    font-weight:
+        650;
 }
+
+
+
+/* =========================================================
+   GAME LIBRARY
+========================================================= */
+
+.mm-game-library {
+
+    width:
+        min(
+            100%,
+            1050px
+        );
+
+    margin:
+        0 auto;
+}
+
+
+.mm-library-heading {
+
+    margin-bottom:
+        24px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        20px;
+
+    text-align:
+        left;
+}
+
+
+.mm-library-heading h2 {
+
+    margin:
+        0 0 5px;
+}
+
+
+.mm-library-heading p {
+
+    margin:
+        0;
+
+    color:
+        var(--mm-muted);
+}
+
+
+
+/* =========================================================
+   SAVED GAME CARDS
+========================================================= */
+
+.mm-saved-games-grid {
+
+    width:
+        min(
+            100%,
+            1050px
+        );
+
+    margin:
+        0 auto;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap:
+        20px;
+}
+
+
+.mm-saved-game-card {
+
+    min-height:
+        210px;
+
+    padding:
+        27px 24px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        flex-start;
+
+    border:
+        1px solid
+        var(--mm-border);
+
+    border-radius:
+        24px;
+
+    background:
+        var(--mm-panel);
+
+    box-shadow:
+        var(--mm-shadow);
+
+    text-align:
+        center;
+
+    backdrop-filter:
+        blur(18px);
+
+    -webkit-backdrop-filter:
+        blur(18px);
+}
+
+
+.mm-saved-game-card h3 {
+
+    margin:
+        0 0 8px;
+
+    color:
+        var(--mm-text);
+
+    font-size:
+        24px;
+
+    letter-spacing:
+        -0.025em;
+}
+
+
+.mm-created-date {
+
+    margin:
+        0 0 6px !important;
+
+    color:
+        #86868b !important;
+
+    font-size:
+        14px;
+
+    font-weight:
+        600;
+}
+
+
+.mm-pair-count {
+
+    margin:
+        0 0 22px !important;
+
+    color:
+        var(--mm-muted) !important;
+
+    font-size:
+        15px;
+}
+
+
+.mm-game-card-actions {
+
+    width:
+        100%;
+
+    margin-top:
+        auto;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:
+        10px;
+}
+
+
+
+/* =========================================================
+   GAME NAME
+========================================================= */
+
+.mm-name-panel {
+
+    width:
+        min(
+            100%,
+            620px
+        );
+
+    margin:
+        0 auto
+        30px;
+
+    padding:
+        25px 26px;
+
+    border:
+        1px solid
+        var(--mm-border);
+
+    border-radius:
+        24px;
+
+    background:
+        var(--mm-panel);
+
+    box-shadow:
+        var(--mm-shadow);
+
+    text-align:
+        left;
+}
+
+
+.mm-name-panel label {
+
+    display:
+        block;
+
+    margin-bottom:
+        10px;
+
+    color:
+        var(--mm-text);
+
+    font-size:
+        16px;
+
+    font-weight:
+        700;
+}
+
+
+.mm-name-panel input {
+
+    width:
+        100%;
+
+    min-height:
+        54px;
+
+    padding:
+        14px 17px;
+
+    border:
+        1px solid
+        #d2d2d7;
+
+    border-radius:
+        15px;
+
+    outline:
+        none;
+
+    background:
+        #ffffff;
+
+    color:
+        var(--mm-text);
+
+    font-size:
+        18px;
+
+    box-shadow:
+        inset
+        0 1px 2px
+        rgba(
+            0,
+            0,
+            0,
+            0.025
+        );
+
+    transition:
+        border-color
+        150ms ease,
+        box-shadow
+        150ms ease;
+}
+
+
+.mm-name-panel input:focus {
+
+    border-color:
+        var(--mm-blue);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(
+            0,
+            113,
+            227,
+            0.12
+        );
+}
+
+
+
+/* =========================================================
+   EDITOR BOARD
+========================================================= */
 
 .mm-board-section {
-    width: 100%;
 
-    margin: 0 auto;
+    width:
+        100%;
+
+    margin:
+        0 auto;
 }
 
-.mm-board-label {
-    width: 100%;
-
-    margin: 0 0 12px;
-
-    color: var(--mm-text);
-
-    font-size: 18px;
-    font-weight: 750;
-
-    text-align: left;
-}
 
 .mm-board-scroll {
-    width: 100%;
 
-    overflow-x: auto;
+    width:
+        100%;
 
-    padding: 4px 2px 18px;
+    overflow-x:
+        auto;
+
+    padding:
+        4px 2px
+        20px;
 }
+
 
 .mm-pair-board {
-    position: relative;
 
-    min-width: 1110px;
+    min-width:
+        1110px;
 
-    padding: 8px 0;
+    padding:
+        8px 0
+        14px;
 }
+
+
+.mm-board-label {
+
+    position:
+        relative;
+
+    z-index:
+        3;
+
+    width:
+        100%;
+
+    margin:
+        0 0 15px;
+
+    padding-left:
+        4px;
+
+    color:
+        var(--mm-text);
+
+    font-size:
+        18px;
+
+    font-weight:
+        750;
+
+    text-align:
+        left;
+}
+
 
 .mm-card-row {
-    position: relative;
-    z-index: 2;
 
-    display: grid;
-    grid-template-columns: repeat(6, minmax(160px, 1fr));
-    gap: 18px;
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            6,
+            minmax(
+                160px,
+                1fr
+            )
+        );
+
+    gap:
+        18px;
 }
 
-.mm-arrow-space {
-    position: relative;
 
-    height: 92px;
+
+/* =========================================================
+   SETUP ARROWS
+
+   These now have their own row.
+   The Matching Items label is completely outside it.
+========================================================= */
+
+.mm-pair-arrows {
+
+    width:
+        100%;
+
+    height:
+        115px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            6,
+            minmax(
+                160px,
+                1fr
+            )
+        );
+
+    gap:
+        18px;
+
+    align-items:
+        center;
+
+    justify-items:
+        center;
+
+    color:
+        rgba(
+            29,
+            29,
+            31,
+            0.48
+        );
+
+    font-size:
+        48px;
+
+    font-weight:
+        300;
+
+    line-height:
+        1;
 }
 
-.mm-arrow-layer,
-.mm-line-layer {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
 
-    width: 100%;
-    height: 100%;
+.mm-matching-label {
 
-    pointer-events: none;
-    overflow: visible;
+    margin:
+        0 0 15px;
+
+    padding-top:
+        2px;
 }
+
+
+
+/* =========================================================
+   EDITOR CARDS
+========================================================= */
 
 .mm-editor-card,
 .mm-play-card {
-    position: relative;
 
-    min-width: 0;
+    position:
+        relative;
 
-    border: 1px solid var(--mm-border);
-    border-radius: 22px;
+    min-width:
+        0;
 
-    background: var(--mm-panel);
+    border:
+        1px solid
+        var(--mm-border);
+
+    border-radius:
+        22px;
+
+    background:
+        var(--mm-panel);
 
     box-shadow:
-        0 13px 34px rgba(0, 0, 0, 0.08);
-
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+        0 13px 34px
+        rgba(
+            0,
+            0,
+            0,
+            0.08
+        );
 }
+
 
 .mm-editor-card {
-    min-height: 300px;
 
-    padding: 14px;
+    min-height:
+        300px;
 
-    display: flex;
-    flex-direction: column;
-    gap: 11px;
+    padding:
+        14px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        11px;
 }
+
 
 .mm-card-number {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    z-index: 3;
 
-    min-width: 28px;
-    height: 28px;
+    position:
+        absolute;
 
-    padding: 0 8px;
+    top:
+        10px;
 
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    left:
+        10px;
 
-    border-radius: 999px;
+    z-index:
+        3;
 
-    background: rgba(29, 29, 31, 0.9);
-    color: #ffffff;
+    min-width:
+        28px;
 
-    font-size: 13px;
-    font-weight: 750;
+    height:
+        28px;
+
+    padding:
+        0 8px;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        999px;
+
+    background:
+        rgba(
+            29,
+            29,
+            31,
+            0.9
+        );
+
+    color:
+        #ffffff;
+
+    font-size:
+        13px;
+
+    font-weight:
+        750;
 }
+
+
+
+/* =========================================================
+   PHOTOS
+========================================================= */
 
 .mm-photo-preview {
-    position: relative;
 
-    width: 100%;
+    width:
+        100%;
 
-    aspect-ratio: 1 / 0.82;
+    aspect-ratio:
+        1 / 0.82;
 
-    overflow: hidden;
+    overflow:
+        hidden;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display:
+        flex;
 
-    border: 1px dashed #c7c7cc;
-    border-radius: 16px;
+    align-items:
+        center;
 
-    background: #f5f5f7;
+    justify-content:
+        center;
+
+    border:
+        1px dashed
+        #c7c7cc;
+
+    border-radius:
+        16px;
+
+    background:
+        #f5f5f7;
 }
+
 
 .mm-photo-preview img {
-    width: 100%;
-    height: 100%;
 
-    object-fit: cover;
+    width:
+        100%;
+
+    height:
+        100%;
+
+    object-fit:
+        cover;
 }
+
 
 .mm-photo-placeholder {
-    padding: 16px;
 
-    color: #86868b;
+    padding:
+        16px;
 
-    font-size: 14px;
-    line-height: 1.35;
+    color:
+        #86868b;
 
-    text-align: center;
+    font-size:
+        14px;
+
+    line-height:
+        1.35;
+
+    text-align:
+        center;
 }
+
+
+
+/* =========================================================
+   TEXT AREA
+========================================================= */
 
 .mm-text-input {
-    width: 100%;
-    min-height: 58px;
 
-    padding: 12px 13px;
+    width:
+        100%;
 
-    resize: vertical;
+    min-height:
+        58px;
 
-    border: 1px solid #d2d2d7;
-    border-radius: 13px;
-    outline: none;
+    padding:
+        12px 13px;
 
-    background: #ffffff;
-    color: var(--mm-text);
+    resize:
+        vertical;
 
-    font-size: 15px;
-    line-height: 1.4;
+    border:
+        1px solid
+        #d2d2d7;
+
+    border-radius:
+        13px;
+
+    outline:
+        none;
+
+    background:
+        #ffffff;
+
+    color:
+        var(--mm-text);
+
+    font-size:
+        15px;
+
+    line-height:
+        1.4;
 }
+
 
 .mm-text-input:focus {
-    border-color: var(--mm-blue);
+
+    border-color:
+        var(--mm-blue);
 
     box-shadow:
-        0 0 0 4px rgba(0, 113, 227, 0.12);
+        0 0 0 4px
+        rgba(
+            0,
+            113,
+            227,
+            0.12
+        );
 }
 
+
+
+/* =========================================================
+   PHOTO CONTROLS
+========================================================= */
+
 .mm-photo-controls {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 8px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr auto;
+
+    gap:
+        8px;
 }
+
 
 .mm-file-label,
 .mm-remove-photo {
-    min-height: 40px;
 
-    padding: 9px 11px;
+    min-height:
+        40px;
 
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    padding:
+        9px 11px;
 
-    border-radius: 12px;
+    display:
+        inline-flex;
 
-    font-size: 13px;
-    font-weight: 700;
+    align-items:
+        center;
 
-    cursor: pointer;
+    justify-content:
+        center;
+
+    border-radius:
+        12px;
+
+    font-size:
+        13px;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
 }
+
 
 .mm-file-label {
-    background: #e8f2ff;
-    color: #0066cc;
+
+    background:
+        #e8f2ff;
+
+    color:
+        #0066cc;
 }
+
 
 .mm-file-label input {
-    position: absolute;
 
-    opacity: 0;
-    pointer-events: none;
+    position:
+        absolute;
+
+    opacity:
+        0;
+
+    pointer-events:
+        none;
 }
+
 
 .mm-remove-photo {
-    border: 0;
 
-    background: #f5f5f7;
-    color: var(--mm-muted);
+    border:
+        0;
+
+    background:
+        #f5f5f7;
+
+    color:
+        var(--mm-muted);
 }
 
-.mm-actions {
-    width: min(100%, 720px);
 
-    margin: 28px auto 0;
-
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 14px;
-}
-
-.mm-button {
-    min-height: 56px;
-
-    padding: 14px 22px;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    border: 1px solid var(--mm-border);
-    border-radius: 17px;
-
-    background: #ffffff;
-    color: var(--mm-text);
-
-    font-weight: 700;
-
-    cursor: pointer;
-
-    box-shadow:
-        0 10px 26px rgba(0, 0, 0, 0.07);
-
-    transition:
-        transform 160ms ease,
-        box-shadow 160ms ease;
-}
-
-.mm-button:hover {
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 14px 32px rgba(0, 0, 0, 0.1);
-}
-
-.mm-button-primary {
-    border-color: #1d1d1f;
-
-    background: #1d1d1f;
-    color: #ffffff;
-
-    box-shadow:
-        0 13px 30px rgba(0, 0, 0, 0.15);
-}
-
-.mm-button-danger {
-    color: var(--mm-red);
-}
-
-.mm-status {
-    min-height: 26px;
-
-    margin: 18px auto 0;
-
-    color: var(--mm-green);
-
-    font-weight: 700;
-
-    text-align: center;
-}
 
 /* =========================================================
-   Play level picker
+   BUTTONS
 ========================================================= */
 
-.mm-level-picker {
-    width: min(100%, 1080px);
+.mm-actions {
 
-    margin: 34px auto 0;
+    width:
+        min(
+            100%,
+            720px
+        );
 
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 22px;
+    margin:
+        30px auto 0;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            1fr
+        );
+
+    gap:
+        14px;
 }
 
-.mm-level-choice {
-    min-height: 260px;
 
-    padding: 28px 24px;
+.mm-button {
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    min-height:
+        56px;
 
-    border: 1px solid var(--mm-border);
-    border-radius: 27px;
+    padding:
+        14px 22px;
 
-    background: var(--mm-panel);
+    display:
+        inline-flex;
 
-    box-shadow: var(--mm-shadow);
+    align-items:
+        center;
 
-    text-align: center;
+    justify-content:
+        center;
 
-    transition:
-        transform 170ms ease,
-        box-shadow 170ms ease;
-}
+    border:
+        1px solid
+        var(--mm-border);
 
-.mm-level-choice:hover {
-    transform: translateY(-4px);
+    border-radius:
+        17px;
+
+    background:
+        #ffffff;
+
+    color:
+        var(--mm-text);
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
 
     box-shadow:
-        0 21px 50px rgba(0, 0, 0, 0.12);
+        0 10px 26px
+        rgba(
+            0,
+            0,
+            0,
+            0.07
+        );
+
+    transition:
+        transform
+        160ms ease,
+        box-shadow
+        160ms ease;
 }
 
-.mm-level-choice-number {
-    width: 58px;
-    height: 58px;
 
-    margin-bottom: 20px;
+.mm-button:hover {
 
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    transform:
+        translateY(-2px);
 
-    border-radius: 18px;
-
-    background: #1d1d1f;
-    color: #ffffff;
-
-    font-size: 21px;
-    font-weight: 750;
+    box-shadow:
+        0 14px 32px
+        rgba(
+            0,
+            0,
+            0,
+            0.1
+        );
 }
 
-.mm-level-choice h2 {
-    margin: 0 0 10px;
 
-    font-size: 32px;
+.mm-button-primary {
+
+    border-color:
+        #1d1d1f;
+
+    background:
+        #1d1d1f;
+
+    color:
+        #ffffff;
+
+    box-shadow:
+        0 13px 30px
+        rgba(
+            0,
+            0,
+            0,
+            0.15
+        );
 }
 
-.mm-level-choice p {
-    margin: 0 0 22px;
 
-    color: var(--mm-muted);
+.mm-button-danger,
+.mm-delete-game {
 
-    line-height: 1.55;
+    color:
+        var(--mm-red);
 }
 
-.mm-level-choice .mm-button {
-    width: 100%;
 
-    margin-top: auto;
+.mm-status {
+
+    min-height:
+        26px;
+
+    margin:
+        18px auto 0;
+
+    color:
+        var(--mm-green);
+
+    font-weight:
+        700;
+
+    text-align:
+        center;
 }
+
+
 
 /* =========================================================
-   Gameplay
+   GAMEPLAY
 ========================================================= */
 
 .mm-game-instruction {
-    width: min(100%, 900px);
 
-    margin: 0 auto 26px;
-    padding: 18px 24px;
+    width:
+        min(
+            100%,
+            900px
+        );
 
-    border: 1px solid var(--mm-border);
-    border-radius: 19px;
+    margin:
+        0 auto 28px;
 
-    background: var(--mm-panel);
-    color: var(--mm-muted);
+    padding:
+        18px 24px;
 
-    font-size: 17px;
-    line-height: 1.55;
+    border:
+        1px solid
+        var(--mm-border);
 
-    text-align: center;
+    border-radius:
+        19px;
+
+    background:
+        var(--mm-panel);
+
+    color:
+        var(--mm-muted);
+
+    font-size:
+        17px;
+
+    line-height:
+        1.55;
+
+    text-align:
+        center;
 
     box-shadow:
-        0 11px 30px rgba(0, 0, 0, 0.07);
+        0 11px 30px
+        rgba(
+            0,
+            0,
+            0,
+            0.07
+        );
 }
+
 
 .mm-game-board {
-    position: relative;
 
-    min-width: 1110px;
+    position:
+        relative;
 
-    padding: 8px 0;
+    min-width:
+        1110px;
+
+    padding:
+        8px 0;
 }
+
 
 .mm-play-row {
-    position: relative;
-    z-index: 2;
 
-    display: grid;
-    grid-template-columns: repeat(6, minmax(160px, 1fr));
-    gap: 18px;
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            6,
+            minmax(
+                160px,
+                1fr
+            )
+        );
+
+    gap:
+        18px;
 }
 
-.mm-play-row + .mm-play-row {
-    margin-top: 105px;
+
+/*
+   Increased spacing between the two gameplay rows.
+*/
+
+.mm-play-matching-label {
+
+    margin-top:
+        135px;
+
+    margin-bottom:
+        16px;
 }
+
 
 .mm-play-card {
-    min-height: 230px;
 
-    padding: 15px;
+    min-height:
+        230px;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
+    padding:
+        15px;
 
-    cursor: pointer;
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        12px;
+
+    cursor:
+        pointer;
 
     transition:
-        transform 160ms ease,
-        box-shadow 160ms ease,
-        border-color 160ms ease;
+        transform
+        160ms ease,
+        box-shadow
+        160ms ease,
+        border-color
+        160ms ease;
 }
+
 
 .mm-play-card:hover:not(.is-used) {
-    transform: translateY(-3px);
+
+    transform:
+        translateY(-3px);
 
     box-shadow:
-        0 18px 42px rgba(0, 0, 0, 0.12);
+        0 18px 42px
+        rgba(
+            0,
+            0,
+            0,
+            0.12
+        );
 }
 
-.mm-play-card:focus-visible {
-    outline: 3px solid rgba(0, 113, 227, 0.45);
-    outline-offset: 3px;
-}
 
 .mm-play-card.is-selected {
-    border-color: var(--mm-blue);
+
+    border-color:
+        var(--mm-blue);
 
     box-shadow:
-        0 0 0 4px rgba(0, 113, 227, 0.14),
-        0 17px 40px rgba(0, 0, 0, 0.1);
+        0 0 0 4px
+        rgba(
+            0,
+            113,
+            227,
+            0.14
+        ),
+        0 17px 40px
+        rgba(
+            0,
+            0,
+            0,
+            0.1
+        );
 }
+
 
 .mm-play-card.is-used {
-    cursor: default;
 
-    opacity: 0.82;
+    cursor:
+        default;
+
+    opacity:
+        0.82;
 }
+
 
 .mm-play-card.is-correct {
-    border-color: var(--mm-green);
 
-    background: rgba(239, 255, 244, 0.96);
+    border-color:
+        var(--mm-green);
+
+    background:
+        rgba(
+            239,
+            255,
+            244,
+            0.96
+        );
 }
+
 
 .mm-play-card.is-wrong {
-    border-color: var(--mm-red);
 
-    background: rgba(255, 241, 243, 0.96);
+    border-color:
+        var(--mm-red);
+
+    background:
+        rgba(
+            255,
+            241,
+            243,
+            0.96
+        );
 }
+
 
 .mm-play-image {
-    width: 100%;
 
-    aspect-ratio: 1 / 0.86;
+    width:
+        100%;
 
-    overflow: hidden;
+    aspect-ratio:
+        1 / 0.86;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    overflow:
+        hidden;
 
-    border-radius: 16px;
+    display:
+        flex;
 
-    background: #f5f5f7;
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        16px;
+
+    background:
+        #f5f5f7;
 }
+
 
 .mm-play-image img {
-    width: 100%;
-    height: 100%;
 
-    object-fit: cover;
+    width:
+        100%;
+
+    height:
+        100%;
+
+    object-fit:
+        cover;
 }
 
-.mm-play-placeholder {
-    padding: 14px;
-
-    color: #86868b;
-
-    font-size: 14px;
-
-    text-align: center;
-}
 
 .mm-play-text {
-    color: var(--mm-text);
 
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 1.4;
+    color:
+        var(--mm-text);
 
-    text-align: center;
-    overflow-wrap: anywhere;
+    font-size:
+        16px;
+
+    font-weight:
+        700;
+
+    line-height:
+        1.4;
+
+    text-align:
+        center;
+
+    overflow-wrap:
+        anywhere;
 }
+
 
 .mm-progress {
-    margin: 16px 0 0;
 
-    color: var(--mm-muted);
+    margin:
+        16px 0 0;
 
-    font-size: 17px;
-    font-weight: 700;
+    color:
+        var(--mm-muted);
 
-    text-align: center;
+    font-size:
+        17px;
+
+    font-weight:
+        700;
+
+    text-align:
+        center;
 }
+
+
+.mm-line-layer {
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    z-index:
+        1;
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    pointer-events:
+        none;
+
+    overflow:
+        visible;
+}
+
+
+
+/* =========================================================
+   RESULTS
+========================================================= */
 
 .mm-results {
-    width: min(100%, 780px);
 
-    margin: 34px auto 0;
-    padding: 32px;
+    width:
+        min(
+            100%,
+            780px
+        );
 
-    border: 1px solid var(--mm-border);
-    border-radius: 28px;
+    margin:
+        34px auto 0;
 
-    background: var(--mm-panel);
+    padding:
+        32px;
 
-    box-shadow: var(--mm-shadow);
+    border:
+        1px solid
+        var(--mm-border);
 
-    text-align: center;
+    border-radius:
+        28px;
+
+    background:
+        var(--mm-panel);
+
+    box-shadow:
+        var(--mm-shadow);
+
+    text-align:
+        center;
 }
+
 
 .mm-results[hidden] {
-    display: none;
+
+    display:
+        none;
 }
+
 
 .mm-results h2 {
-    margin: 0 0 10px;
 
-    font-size: clamp(32px, 4vw, 46px);
+    margin:
+        0 0 10px;
+
+    font-size:
+        clamp(
+            32px,
+            4vw,
+            46px
+        );
 }
+
 
 .mm-score {
-    margin: 0 0 24px;
 
-    color: var(--mm-text);
+    margin:
+        0 0 24px;
 
-    font-size: clamp(24px, 3vw, 34px);
-    font-weight: 750;
+    color:
+        var(--mm-text);
+
+    font-size:
+        clamp(
+            24px,
+            3vw,
+            34px
+        );
+
+    font-weight:
+        750;
 }
+
 
 .mm-result-list {
-    margin: 0 0 26px;
-    padding: 0;
 
-    display: grid;
-    gap: 10px;
+    margin:
+        0 0 26px;
 
-    list-style: none;
+    padding:
+        0;
 
-    text-align: left;
+    display:
+        grid;
+
+    gap:
+        10px;
+
+    list-style:
+        none;
+
+    text-align:
+        left;
 }
+
 
 .mm-result-item {
-    padding: 13px 15px;
 
-    border-radius: 14px;
+    padding:
+        13px 15px;
 
-    background: #f5f5f7;
+    border-radius:
+        14px;
 
-    line-height: 1.45;
+    background:
+        #f5f5f7;
+
+    line-height:
+        1.45;
 }
+
 
 .mm-result-item.correct {
-    color: var(--mm-green);
+
+    color:
+        var(--mm-green);
 }
+
 
 .mm-result-item.wrong {
-    color: var(--mm-red);
+
+    color:
+        var(--mm-red);
 }
+
 
 .mm-result-actions {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            1fr
+        );
+
+    gap:
+        14px;
 }
+
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
 
 .mm-empty-message {
-    width: min(100%, 760px);
 
-    margin: 30px auto;
-    padding: 28px;
+    width:
+        min(
+            100%,
+            760px
+        );
 
-    border: 1px solid var(--mm-border);
-    border-radius: 22px;
+    margin:
+        30px auto;
 
-    background: var(--mm-panel);
+    padding:
+        28px;
 
-    box-shadow: var(--mm-shadow);
+    border:
+        1px solid
+        var(--mm-border);
 
-    color: var(--mm-muted);
+    border-radius:
+        22px;
 
-    font-size: 18px;
-    line-height: 1.55;
+    background:
+        var(--mm-panel);
 
-    text-align: center;
+    box-shadow:
+        var(--mm-shadow);
+
+    color:
+        var(--mm-muted);
+
+    font-size:
+        18px;
+
+    line-height:
+        1.55;
+
+    text-align:
+        center;
 }
 
+
+
 /* =========================================================
-   Tablet
+   TABLET
 ========================================================= */
 
-@media (max-width: 920px) {
+@media (
+    max-width: 920px
+) {
 
     .mm-page {
-        padding-inline: 22px;
+
+        padding-inline:
+            22px;
     }
+
 
     .mm-page-header {
-        padding: 70px 0 0;
+
+        padding:
+            70px 0 0;
     }
+
 
     .mm-back-link {
-        top: 0;
+
+        top:
+            0;
     }
 
-    .mm-example-grid,
-    .mm-level-picker {
-        grid-template-columns: 1fr;
+
+    .mm-example-grid {
+
+        grid-template-columns:
+            1fr;
     }
 
+
+    .mm-saved-games-grid {
+
+        grid-template-columns:
+            repeat(
+                2,
+                1fr
+            );
+    }
+
+
+    .mm-category-grid {
+
+        grid-template-columns:
+            repeat(
+                2,
+                1fr
+            );
+
+        max-width:
+            700px;
+    }
+
+
+    .mm-category-grid
     .mm-level-choice {
-        min-height: 220px;
+
+        grid-column:
+            auto !important;
+    }
+
+
+    .mm-category-grid
+    .mm-level-choice:last-child {
+
+        grid-column:
+            1 / -1;
+
+        width:
+            calc(
+                50% - 10px
+            );
+
+        justify-self:
+            center;
+    }
+
+
+    .mm-library-heading {
+
+        flex-direction:
+            column;
+
+        align-items:
+            stretch;
     }
 }
 
+
+
 /* =========================================================
-   Mobile
+   PHONE
 ========================================================= */
 
-@media (max-width: 640px) {
+@media (
+    max-width: 640px
+) {
 
     .mm-page {
-        padding: 24px 16px 42px;
+
+        padding:
+            24px 16px 42px;
     }
+
+
+    .mm-category-grid {
+
+        display:
+            grid;
+
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .mm-category-grid
+    .mm-level-choice:last-child {
+
+        width:
+            100%;
+
+        grid-column:
+            auto;
+    }
+
+
+    .mm-saved-games-grid {
+
+        grid-template-columns:
+            1fr;
+    }
+
 
     .mm-info-panel,
-    .mm-results {
-        padding: 22px 18px;
+    .mm-results,
+    .mm-name-panel {
 
-        border-radius: 22px;
+        padding:
+            22px 18px;
+
+        border-radius:
+            22px;
     }
+
 
     .mm-actions,
-    .mm-result-actions {
-        grid-template-columns: 1fr;
-    }
+    .mm-result-actions,
+    .mm-game-card-actions {
 
-    .mm-card-row,
-    .mm-play-row {
-        gap: 14px;
+        grid-template-columns:
+            1fr;
     }
 }
