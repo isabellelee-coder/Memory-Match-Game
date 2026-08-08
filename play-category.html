@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Choose Game | Memory Match</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="game-pages.css">
+</head>
+
+<body>
+
+    <main
+        class="mm-page"
+        data-play-category-page
+    >
+
+        <header class="mm-page-header">
+
+            <a
+                class="mm-back-link"
+                href="play.html"
+            >
+                ← Back
+            </a>
+
+            <h1 data-category-title>
+                Category
+            </h1>
+
+            <p class="mm-lead">
+                Choose a game.
+            </p>
+
+        </header>
+
+
+        <section
+            class="mm-saved-games-grid"
+            data-play-games
+        ></section>
+
+
+        <div
+            class="mm-empty-message"
+            data-no-play-games
+            hidden
+        >
+            There are no games in this category yet.
+            A family member or friend can create one in Setup.
+        </div>
+
+    </main>
+
+
+    <script src="memory-game.js"></script>
+
+</body>
+</html>
