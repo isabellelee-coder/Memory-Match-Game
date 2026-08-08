@@ -1,42 +1,182 @@
 "use strict";
 
-const LEVEL_INFO = {
-    gentle: {
-        title: "Gentle",
+
+/* =========================================================
+   CATEGORY INFORMATION
+========================================================= */
+
+const CATEGORIES = {
+
+    memories: {
+        title: "Memories",
+
+        description:
+            "Create games about meaningful memories and important moments.",
+
+        examples: [
+            ["Wedding photo", "Our wedding day"],
+            ["Family vacation", "Summer at Lake Tahoe"],
+            ["Birthday party", "Mom's 70th birthday"]
+        ]
+    },
+
+
+    places: {
+        title: "Places",
+
+        description:
+            "Create games about familiar homes, trips, neighborhoods, and locations.",
+
+        examples: [
+            ["Photo of house", "Our old home"],
+            ["Beach photo", "Santa Cruz"],
+            ["Restaurant photo", "Our favorite restaurant"]
+        ]
+    },
+
+
+    people: {
+        title: "People",
+
+        description:
+            "Create games about family members, friends, names, and relationships.",
+
         examples: [
             ["Photo of Grandma", "Grandma"],
-            ["Photo of Dad", "My son, David"],
+            ["Photo of David", "My son"],
             ["Photo of Anna", "My granddaughter"]
         ]
     },
 
-    guided: {
-        title: "Guided",
+
+    favorites: {
+        title: "Favorites",
+
+        description:
+            "Create games about favorite foods, music, hobbies, and activities.",
+
         examples: [
-            ["Family vacation", "Lake Tahoe"],
-            ["Wedding photo", "Our wedding day"],
-            ["Old family home", "San Jose"]
+            ["Gardening", "Favorite hobby"],
+            ["Noodles", "Favorite food"],
+            ["Piano", "Favorite instrument"]
         ]
     },
 
-    challenge: {
-        title: "Challenge",
+
+    other: {
+        title: "Other",
+
+        description:
+            "Create games about anything else you would like to remember or practice.",
+
         examples: [
-            ["Grandpa", "Loves gardening"],
-            ["Maria", "Enjoys singing"],
-            ["Robert", "Favorite food is noodles"]
+            ["Blue", "Favorite color"],
+            ["Golden Retriever", "Dog breed"],
+            ["July 15", "Birthday"]
         ]
     }
+
 };
 
-function storageKey(level) {
-    return `memoryMatch-${level}`;
+
+
+/* =========================================================
+   URL HELPERS
+========================================================= */
+
+function getParams() {
+    return new URLSearchParams(
+        window.location.search
+    );
 }
 
+
+function getCategoryFromUrl() {
+
+    const category =
+        getParams().get("category");
+
+    if (CATEGORIES[category]) {
+        return category;
+    }
+
+    return "other";
+}
+
+
+function getGameIdFromUrl() {
+    return getParams().get("game");
+}
+
+
+
+/* =========================================================
+   STORAGE
+========================================================= */
+
+function categoryStorageKey(category) {
+    return `memoryMatch-category-${category}`;
+}
+
+
+function loadCategoryGames(category) {
+
+    try {
+
+        const raw =
+            localStorage.getItem(
+                categoryStorageKey(category)
+            );
+
+        if (!raw) {
+            return [];
+        }
+
+        const games =
+            JSON.parse(raw);
+
+        if (!Array.isArray(games)) {
+            return [];
+        }
+
+        return games;
+
+    } catch (error) {
+
+        console.error(
+            "Could not load games:",
+            error
+        );
+
+        return [];
+    }
+}
+
+
+function saveCategoryGames(
+    category,
+    games
+) {
+
+    localStorage.setItem(
+        categoryStorageKey(category),
+        JSON.stringify(games)
+    );
+}
+
+
+
+/* =========================================================
+   MATCHING PAIRS
+========================================================= */
+
 function blankPairs() {
+
     return Array.from(
         { length: 6 },
+
         (_, index) => ({
+
             id: index,
 
             first: {
@@ -48,68 +188,57 @@ function blankPairs() {
                 text: "",
                 image: ""
             }
+
         })
     );
 }
 
-function loadPairs(level) {
-    try {
-        const raw = localStorage.getItem(storageKey(level));
 
-        if (!raw) {
-            return blankPairs();
-        }
+function createGameObject(name = "Untitled Game") {
 
-        const parsed = JSON.parse(raw);
+    return {
 
-        if (!Array.isArray(parsed)) {
-            return blankPairs();
-        }
+        id:
+            `${Date.now()}-${Math.random()
+                .toString(36)
+                .slice(2, 8)}`,
 
-        return blankPairs().map((fallback, index) => {
-            const saved = parsed[index] || {};
+        name,
 
-            return {
-                id: index,
+        pairs: blankPairs(),
 
-                first: {
-                    text: saved.first?.text || "",
-                    image: saved.first?.image || ""
-                },
+        createdAt:
+            Date.now(),
 
-                match: {
-                    text: saved.match?.text || "",
-                    image: saved.match?.image || ""
-                }
-            };
-        });
-    } catch (error) {
-        console.error(
-            "Could not load saved game:",
-            error
-        );
-
-        return blankPairs();
-    }
+        updatedAt:
+            Date.now()
+    };
 }
 
-function savePairs(level, pairs) {
-    localStorage.setItem(
-        storageKey(level),
-        JSON.stringify(pairs)
-    );
-}
+
+
+/* =========================================================
+   GENERAL HELPERS
+========================================================= */
 
 function escapeHtml(value) {
+
     return String(value)
+
         .replaceAll("&", "&amp;")
+
         .replaceAll("<", "&lt;")
+
         .replaceAll(">", "&gt;")
+
         .replaceAll('"', "&quot;")
+
         .replaceAll("'", "&#039;");
 }
 
+
 function shuffle(items) {
+
     const copy = [...items];
 
     for (
@@ -117,9 +246,12 @@ function shuffle(items) {
         i > 0;
         i -= 1
     ) {
-        const j = Math.floor(
-            Math.random() * (i + 1)
-        );
+
+        const j =
+            Math.floor(
+                Math.random() *
+                (i + 1)
+            );
 
         [
             copy[i],
@@ -133,125 +265,459 @@ function shuffle(items) {
     return copy;
 }
 
+
+
+/* =========================================================
+   PHOTO RESIZING
+========================================================= */
+
 function resizeImage(file) {
-    return new Promise((resolve, reject) => {
-        if (
-            !file ||
-            !file.type.startsWith("image/")
-        ) {
-            reject(
-                new Error(
-                    "Please choose an image file."
-                )
-            );
 
-            return;
-        }
+    return new Promise(
+        (resolve, reject) => {
 
-        const reader = new FileReader();
+            if (
+                !file ||
+                !file.type.startsWith("image/")
+            ) {
 
-        reader.onload = () => {
-            const image = new Image();
-
-            image.onload = () => {
-                const maxSide = 900;
-
-                const scale = Math.min(
-                    1,
-                    maxSide /
-                    Math.max(
-                        image.width,
-                        image.height
-                    )
-                );
-
-                const width = Math.max(
-                    1,
-                    Math.round(
-                        image.width * scale
-                    )
-                );
-
-                const height = Math.max(
-                    1,
-                    Math.round(
-                        image.height * scale
-                    )
-                );
-
-                const canvas =
-                    document.createElement("canvas");
-
-                canvas.width = width;
-                canvas.height = height;
-
-                const context =
-                    canvas.getContext("2d");
-
-                context.drawImage(
-                    image,
-                    0,
-                    0,
-                    width,
-                    height
-                );
-
-                resolve(
-                    canvas.toDataURL(
-                        "image/jpeg",
-                        0.78
-                    )
-                );
-            };
-
-            image.onerror = () => {
                 reject(
                     new Error(
-                        "That image could not be opened."
+                        "Please choose an image file."
+                    )
+                );
+
+                return;
+            }
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload = () => {
+
+                const image =
+                    new Image();
+
+
+                image.onload = () => {
+
+                    const maxSide = 900;
+
+
+                    const scale =
+                        Math.min(
+                            1,
+
+                            maxSide /
+                            Math.max(
+                                image.width,
+                                image.height
+                            )
+                        );
+
+
+                    const width =
+                        Math.max(
+                            1,
+
+                            Math.round(
+                                image.width *
+                                scale
+                            )
+                        );
+
+
+                    const height =
+                        Math.max(
+                            1,
+
+                            Math.round(
+                                image.height *
+                                scale
+                            )
+                        );
+
+
+                    const canvas =
+                        document.createElement(
+                            "canvas"
+                        );
+
+
+                    canvas.width = width;
+                    canvas.height = height;
+
+
+                    const context =
+                        canvas.getContext(
+                            "2d"
+                        );
+
+
+                    context.drawImage(
+                        image,
+                        0,
+                        0,
+                        width,
+                        height
+                    );
+
+
+                    resolve(
+                        canvas.toDataURL(
+                            "image/jpeg",
+                            0.78
+                        )
+                    );
+                };
+
+
+                image.onerror = () => {
+
+                    reject(
+                        new Error(
+                            "That image could not be opened."
+                        )
+                    );
+                };
+
+
+                image.src =
+                    reader.result;
+            };
+
+
+            reader.onerror = () => {
+
+                reject(
+                    new Error(
+                        "That image could not be read."
                     )
                 );
             };
 
-            image.src = reader.result;
-        };
 
-        reader.onerror = () => {
-            reject(
-                new Error(
-                    "That image could not be read."
-                )
-            );
-        };
-
-        reader.readAsDataURL(file);
-    });
+            reader.readAsDataURL(file);
+        }
+    );
 }
+
+
+
+/* =========================================================
+   CATEGORY SETUP PAGE
+========================================================= */
+
+function initCategorySetupPage() {
+
+    const root =
+        document.querySelector(
+            "[data-category-setup-page]"
+        );
+
+
+    if (!root) {
+        return;
+    }
+
+
+    const category =
+        getCategoryFromUrl();
+
+
+    const info =
+        CATEGORIES[category];
+
+
+    const title =
+        root.querySelector(
+            "[data-category-title]"
+        );
+
+
+    const description =
+        root.querySelector(
+            "[data-category-description]"
+        );
+
+
+    const exampleContainer =
+        root.querySelector(
+            "[data-category-examples]"
+        );
+
+
+    const gamesContainer =
+        root.querySelector(
+            "[data-saved-games]"
+        );
+
+
+    const noGames =
+        root.querySelector(
+            "[data-no-games]"
+        );
+
+
+    title.textContent =
+        info.title;
+
+
+    description.textContent =
+        info.description;
+
+
+    exampleContainer.innerHTML =
+        info.examples
+
+            .map(
+                ([first, match], index) => `
+                    <div class="mm-example">
+
+                        <span>
+                            Example ${index + 1}
+                        </span>
+
+                        <strong>
+                            ${escapeHtml(first)}
+                            ↕
+                            ${escapeHtml(match)}
+                        </strong>
+
+                    </div>
+                `
+            )
+
+            .join("");
+
+
+    function renderGames() {
+
+        const games =
+            loadCategoryGames(category);
+
+
+        gamesContainer.innerHTML = "";
+
+
+        noGames.hidden =
+            games.length !== 0;
+
+
+        games.forEach(
+            (game) => {
+
+                const card =
+                    document.createElement(
+                        "article"
+                    );
+
+
+                card.className =
+                    "mm-saved-game-card";
+
+
+                const completePairs =
+                    game.pairs.filter(
+                        pair =>
+                            (
+                                pair.first.text ||
+                                pair.first.image
+                            ) &&
+                            (
+                                pair.match.text ||
+                                pair.match.image
+                            )
+                    ).length;
+
+
+                card.innerHTML = `
+
+                    <div class="mm-document-icon">
+                        ▤
+                    </div>
+
+                    <h3>
+                        ${escapeHtml(game.name)}
+                    </h3>
+
+                    <p>
+                        ${completePairs} of 6 pairs
+                    </p>
+
+                    <div class="mm-game-card-actions">
+
+                        <a
+                            class="mm-button mm-button-primary"
+                            href="edit-game.html?category=${category}&game=${game.id}"
+                        >
+                            Edit
+                        </a>
+
+                        <button
+                            class="mm-button mm-delete-game"
+                            type="button"
+                            data-delete-game="${game.id}"
+                        >
+                            Delete
+                        </button>
+
+                    </div>
+                `;
+
+
+                gamesContainer.appendChild(
+                    card
+                );
+            }
+        );
+    }
+
+
+    root
+        .querySelector(
+            "[data-create-game]"
+        )
+        .addEventListener(
+            "click",
+            () => {
+
+                const name =
+                    window.prompt(
+                        "Name this game:"
+                    );
+
+
+                if (
+                    name === null
+                ) {
+                    return;
+                }
+
+
+                const finalName =
+                    name.trim() ||
+                    "Untitled Game";
+
+
+                const games =
+                    loadCategoryGames(
+                        category
+                    );
+
+
+                const game =
+                    createGameObject(
+                        finalName
+                    );
+
+
+                games.push(game);
+
+
+                saveCategoryGames(
+                    category,
+                    games
+                );
+
+
+                window.location.href =
+                    `edit-game.html?category=${category}&game=${game.id}`;
+            }
+        );
+
+
+    root.addEventListener(
+        "click",
+        event => {
+
+            const button =
+                event.target.closest(
+                    "[data-delete-game]"
+                );
+
+
+            if (!button) {
+                return;
+            }
+
+
+            const gameId =
+                button.dataset.deleteGame;
+
+
+            const confirmed =
+                window.confirm(
+                    "Delete this game?"
+                );
+
+
+            if (!confirmed) {
+                return;
+            }
+
+
+            const games =
+                loadCategoryGames(category)
+                    .filter(
+                        game =>
+                            game.id !== gameId
+                    );
+
+
+            saveCategoryGames(
+                category,
+                games
+            );
+
+
+            renderGames();
+        }
+    );
+
+
+    renderGames();
+}
+
+
+
+/* =========================================================
+   EDITOR CARD
+========================================================= */
 
 function makeEditorCard(
     pairIndex,
     side,
     item
 ) {
+
     const sideName =
         side === "first"
             ? "First item"
             : "Matching item";
 
+
     const imageMarkup =
         item.image
+
             ? `
                 <img
                     src="${item.image}"
-                    alt="${sideName} photo preview"
+                    alt="${sideName} photo"
                 >
             `
+
             : `
                 <div class="mm-photo-placeholder">
                     Add an optional photo
                 </div>
             `;
 
+
     return `
+
         <article
             class="mm-editor-card"
             data-pair-index="${pairIndex}"
@@ -262,6 +728,7 @@ function makeEditorCard(
                 ${pairIndex + 1}
             </span>
 
+
             <div
                 class="mm-photo-preview"
                 data-preview
@@ -269,14 +736,15 @@ function makeEditorCard(
                 ${imageMarkup}
             </div>
 
+
             <textarea
                 class="mm-text-input"
                 rows="2"
                 maxlength="160"
-                aria-label="${sideName} ${pairIndex + 1} text"
                 placeholder="Type the ${sideName.toLowerCase()} here"
                 data-text-input
             >${escapeHtml(item.text)}</textarea>
+
 
             <div class="mm-photo-controls">
 
@@ -292,9 +760,10 @@ function makeEditorCard(
 
                 </label>
 
+
                 <button
-                    type="button"
                     class="mm-remove-photo"
+                    type="button"
                     data-remove-image
                 >
                     Remove
@@ -306,36 +775,52 @@ function makeEditorCard(
     `;
 }
 
+
+
+/* =========================================================
+   SETUP ARROWS
+========================================================= */
+
 function drawSetupArrows(board) {
+
     const svg =
-        board.querySelector(".mm-arrow-layer");
+        board.querySelector(
+            ".mm-arrow-layer"
+        );
+
 
     if (!svg) {
         return;
     }
 
-    const topCards = [
+
+    const firstCards = [
         ...board.querySelectorAll(
             '.mm-editor-card[data-side="first"]'
         )
     ];
 
-    const bottomCards = [
+
+    const matchCards = [
         ...board.querySelectorAll(
             '.mm-editor-card[data-side="match"]'
         )
     ];
 
+
     const boardRect =
         board.getBoundingClientRect();
+
 
     svg.setAttribute(
         "viewBox",
         `0 0 ${boardRect.width} ${boardRect.height}`
     );
 
+
     svg.innerHTML = `
         <defs>
+
             <marker
                 id="mmArrowHead"
                 markerWidth="8"
@@ -344,48 +829,61 @@ function drawSetupArrows(board) {
                 refY="3.5"
                 orient="auto"
             >
+
                 <path
                     d="M0,0 L0,7 L7,3.5 z"
-                    fill="rgba(29,29,31,0.55)"
+                    fill="rgba(29,29,31,0.52)"
                 ></path>
+
             </marker>
+
         </defs>
     `;
 
-    topCards.forEach(
-        (topCard, index) => {
-            const bottomCard =
-                bottomCards[index];
 
-            if (!bottomCard) {
+    firstCards.forEach(
+        (firstCard, index) => {
+
+            const matchingCard =
+                matchCards[index];
+
+
+            if (!matchingCard) {
                 return;
             }
 
-            const topRect =
-                topCard.getBoundingClientRect();
 
-            const bottomRect =
-                bottomCard.getBoundingClientRect();
+            const firstRect =
+                firstCard.getBoundingClientRect();
+
+
+            const matchRect =
+                matchingCard.getBoundingClientRect();
+
 
             const x1 =
-                topRect.left -
+                firstRect.left -
                 boardRect.left +
-                topRect.width / 2;
+                firstRect.width / 2;
+
 
             const y1 =
-                topRect.bottom -
+                firstRect.bottom -
                 boardRect.top +
-                8;
+                10;
+
 
             const x2 =
-                bottomRect.left -
+                matchRect.left -
                 boardRect.left +
-                bottomRect.width / 2;
+                matchRect.width / 2;
+
 
             const y2 =
-                bottomRect.top -
+                matchRect.top -
                 boardRect.top -
-                8;
+                12;
+
 
             const line =
                 document.createElementNS(
@@ -393,75 +891,225 @@ function drawSetupArrows(board) {
                     "line"
                 );
 
-            line.setAttribute("x1", x1);
-            line.setAttribute("y1", y1);
-            line.setAttribute("x2", x2);
-            line.setAttribute("y2", y2);
+
+            line.setAttribute(
+                "x1",
+                x1
+            );
+
+
+            line.setAttribute(
+                "y1",
+                y1
+            );
+
+
+            line.setAttribute(
+                "x2",
+                x2
+            );
+
+
+            line.setAttribute(
+                "y2",
+                y2
+            );
+
 
             line.setAttribute(
                 "stroke",
-                "rgba(29,29,31,0.45)"
+                "rgba(29,29,31,0.42)"
             );
+
 
             line.setAttribute(
                 "stroke-width",
                 "2.5"
             );
 
+
             line.setAttribute(
                 "stroke-linecap",
                 "round"
             );
+
 
             line.setAttribute(
                 "marker-end",
                 "url(#mmArrowHead)"
             );
 
+
             svg.appendChild(line);
         }
     );
 }
 
-function initEditor() {
+
+
+/* =========================================================
+   GAME EDITOR
+========================================================= */
+
+function initGameEditor() {
+
     const root =
         document.querySelector(
-            "[data-editor-level]"
+            "[data-game-editor]"
         );
+
 
     if (!root) {
         return;
     }
 
-    const level =
-        root.dataset.editorLevel;
 
-    let pairs =
-        loadPairs(level);
+    const category =
+        getCategoryFromUrl();
+
+
+    const gameId =
+        getGameIdFromUrl();
+
+
+    let games =
+        loadCategoryGames(category);
+
+
+    let game =
+        games.find(
+            item =>
+                item.id === gameId
+        );
+
+
+    if (!game) {
+
+        game =
+            createGameObject();
+
+
+        games.push(game);
+
+
+        saveCategoryGames(
+            category,
+            games
+        );
+    }
+
+
+    if (
+        !Array.isArray(game.pairs)
+    ) {
+        game.pairs =
+            blankPairs();
+    }
+
+
+    while (
+        game.pairs.length < 6
+    ) {
+
+        game.pairs.push(
+            blankPairs()[
+                game.pairs.length
+            ]
+        );
+    }
+
+
+    const backUrl =
+        `category.html?category=${category}`;
+
+
+    root
+        .querySelector(
+            "[data-editor-back]"
+        )
+        .href =
+            backUrl;
+
+
+    root
+        .querySelector(
+            "[data-bottom-back]"
+        )
+        .href =
+            backUrl;
+
+
+    const nameInput =
+        root.querySelector(
+            "[data-game-name]"
+        );
+
+
+    nameInput.value =
+        game.name;
+
+
+    const exampleContainer =
+        root.querySelector(
+            "[data-editor-examples]"
+        );
+
+
+    exampleContainer.innerHTML =
+        CATEGORIES[category]
+            .examples
+
+            .map(
+                ([first, match], index) => `
+
+                    <div class="mm-example">
+
+                        <span>
+                            Example ${index + 1}
+                        </span>
+
+                        <strong>
+                            ${escapeHtml(first)}
+                            ↕
+                            ${escapeHtml(match)}
+                        </strong>
+
+                    </div>
+                `
+            )
+
+            .join("");
+
 
     const firstRow =
         root.querySelector(
             "[data-first-row]"
         );
 
+
     const matchRow =
         root.querySelector(
             "[data-match-row]"
         );
+
 
     const board =
         root.querySelector(
             "[data-pair-board]"
         );
 
+
     const status =
         root.querySelector(
             "[data-status]"
         );
 
+
     function render() {
+
         firstRow.innerHTML =
-            pairs
+            game.pairs
+
                 .map(
                     (pair, index) =>
                         makeEditorCard(
@@ -470,10 +1118,13 @@ function initEditor() {
                             pair.first
                         )
                 )
+
                 .join("");
 
+
         matchRow.innerHTML =
-            pairs
+            game.pairs
+
                 .map(
                     (pair, index) =>
                         makeEditorCard(
@@ -482,50 +1133,73 @@ function initEditor() {
                             pair.match
                         )
                 )
+
                 .join("");
 
+
         requestAnimationFrame(
-            () => drawSetupArrows(board)
+            () =>
+                drawSetupArrows(
+                    board
+                )
         );
     }
 
+
     root.addEventListener(
         "input",
-        (event) => {
-            const input =
+        event => {
+
+            const textInput =
                 event.target.closest(
                     "[data-text-input]"
                 );
 
-            if (!input) {
-                return;
+
+            if (textInput) {
+
+                const card =
+                    textInput.closest(
+                        ".mm-editor-card"
+                    );
+
+
+                const index =
+                    Number(
+                        card.dataset.pairIndex
+                    );
+
+
+                const side =
+                    card.dataset.side;
+
+
+                game.pairs[index][side].text =
+                    textInput.value;
             }
 
-            const card =
-                input.closest(
-                    ".mm-editor-card"
-                );
 
-            const pairIndex =
-                Number(
-                    card.dataset.pairIndex
-                );
+            if (
+                event.target ===
+                nameInput
+            ) {
 
-            const side =
-                card.dataset.side;
-
-            pairs[pairIndex][side].text =
-                input.value;
+                game.name =
+                    nameInput.value;
+            }
         }
     );
 
+
     root.addEventListener(
         "change",
-        async (event) => {
+        async event => {
+
             const input =
                 event.target.closest(
                     "[data-image-input]"
                 );
+
 
             if (
                 !input ||
@@ -534,84 +1208,107 @@ function initEditor() {
                 return;
             }
 
+
             const card =
                 input.closest(
                     ".mm-editor-card"
                 );
 
-            const pairIndex =
+
+            const index =
                 Number(
                     card.dataset.pairIndex
                 );
 
+
             const side =
                 card.dataset.side;
 
+
             try {
-                const imageData =
+
+                const image =
                     await resizeImage(
                         input.files[0]
                     );
 
-                pairs[pairIndex][side].image =
-                    imageData;
 
-                const preview =
-                    card.querySelector(
-                        "[data-preview]"
-                    );
+                game.pairs[index][side].image =
+                    image;
 
-                preview.innerHTML = `
-                    <img
-                        src="${imageData}"
-                        alt="Selected photo preview"
-                    >
-                `;
-
-                status.textContent =
-                    "Photo added. Press Save Game when you are finished.";
-            } catch (error) {
-                window.alert(error.message);
-            }
-
-            input.value = "";
-        }
-    );
-
-    root.addEventListener(
-        "click",
-        (event) => {
-            const removeButton =
-                event.target.closest(
-                    "[data-remove-image]"
-                );
-
-            if (removeButton) {
-                const card =
-                    removeButton.closest(
-                        ".mm-editor-card"
-                    );
-
-                const pairIndex =
-                    Number(
-                        card.dataset.pairIndex
-                    );
-
-                const side =
-                    card.dataset.side;
-
-                pairs[pairIndex][side].image =
-                    "";
 
                 card
                     .querySelector(
                         "[data-preview]"
                     )
                     .innerHTML = `
+
+                        <img
+                            src="${image}"
+                            alt="Selected photo"
+                        >
+                    `;
+
+
+                status.textContent =
+                    "Photo added. Press Save Game when you are finished.";
+
+            } catch (error) {
+
+                window.alert(
+                    error.message
+                );
+            }
+
+
+            input.value = "";
+        }
+    );
+
+
+    root.addEventListener(
+        "click",
+        event => {
+
+            const remove =
+                event.target.closest(
+                    "[data-remove-image]"
+                );
+
+
+            if (remove) {
+
+                const card =
+                    remove.closest(
+                        ".mm-editor-card"
+                    );
+
+
+                const index =
+                    Number(
+                        card.dataset.pairIndex
+                    );
+
+
+                const side =
+                    card.dataset.side;
+
+
+                game.pairs[index][side].image =
+                    "";
+
+
+                card
+                    .querySelector(
+                        "[data-preview]"
+                    )
+                    .innerHTML = `
+
                         <div class="mm-photo-placeholder">
                             Add an optional photo
                         </div>
                     `;
+
 
                 status.textContent =
                     "Photo removed. Press Save Game to keep the change.";
@@ -619,197 +1316,380 @@ function initEditor() {
                 return;
             }
 
+
             if (
                 event.target.closest(
                     "[data-save-game]"
                 )
             ) {
-                try {
-                    savePairs(
-                        level,
-                        pairs
+
+                game.name =
+                    nameInput.value.trim() ||
+                    "Untitled Game";
+
+
+                game.updatedAt =
+                    Date.now();
+
+
+                games =
+                    loadCategoryGames(
+                        category
                     );
+
+
+                const index =
+                    games.findIndex(
+                        item =>
+                            item.id === game.id
+                    );
+
+
+                if (index >= 0) {
+
+                    games[index] =
+                        game;
+
+                } else {
+
+                    games.push(game);
+                }
+
+
+                try {
+
+                    saveCategoryGames(
+                        category,
+                        games
+                    );
+
 
                     status.textContent =
                         "Game saved successfully.";
+
                 } catch (error) {
+
                     console.error(error);
+
 
                     status.textContent =
                         "The game could not be saved. Try using smaller photos.";
                 }
 
+
                 return;
             }
+
 
             if (
                 event.target.closest(
                     "[data-clear-game]"
                 )
             ) {
+
                 const confirmed =
                     window.confirm(
-                        "Clear all six matching pairs for this level?"
+                        "Clear all six matching pairs?"
                     );
+
 
                 if (!confirmed) {
                     return;
                 }
 
-                pairs = blankPairs();
 
-                savePairs(
-                    level,
-                    pairs
-                );
+                game.pairs =
+                    blankPairs();
+
 
                 render();
 
+
                 status.textContent =
-                    "All matching pairs were cleared.";
+                    "All matching pairs were cleared. Press Save Game to keep the change.";
             }
         }
     );
 
+
     window.addEventListener(
         "resize",
-        () => drawSetupArrows(board)
+        () =>
+            drawSetupArrows(
+                board
+            )
     );
+
 
     render();
 }
 
+
+
+/* =========================================================
+   PLAY CATEGORY PAGE
+========================================================= */
+
+function initPlayCategoryPage() {
+
+    const root =
+        document.querySelector(
+            "[data-play-category-page]"
+        );
+
+
+    if (!root) {
+        return;
+    }
+
+
+    const category =
+        getCategoryFromUrl();
+
+
+    root
+        .querySelector(
+            "[data-category-title]"
+        )
+        .textContent =
+            CATEGORIES[category].title;
+
+
+    const container =
+        root.querySelector(
+            "[data-play-games]"
+        );
+
+
+    const empty =
+        root.querySelector(
+            "[data-no-play-games]"
+        );
+
+
+    const games =
+        loadCategoryGames(category);
+
+
+    empty.hidden =
+        games.length > 0;
+
+
+    container.innerHTML =
+        games
+
+            .map(
+                game => {
+
+                    const count =
+                        game.pairs.filter(
+                            pair =>
+                                (
+                                    pair.first.text ||
+                                    pair.first.image
+                                ) &&
+                                (
+                                    pair.match.text ||
+                                    pair.match.image
+                                )
+                        ).length;
+
+
+                    return `
+
+                        <article class="mm-saved-game-card">
+
+                            <div class="mm-document-icon">
+                                ▤
+                            </div>
+
+                            <h3>
+                                ${escapeHtml(game.name)}
+                            </h3>
+
+                            <p>
+                                ${count} matching pairs
+                            </p>
+
+                            <a
+                                class="mm-button mm-button-primary"
+                                href="game.html?category=${category}&game=${game.id}"
+                            >
+                                Play
+                            </a>
+
+                        </article>
+                    `;
+                }
+            )
+
+            .join("");
+}
+
+
+
+/* =========================================================
+   PLAY CARD
+========================================================= */
+
 function makePlayCard(
     item,
-    rowName
+    rowName,
+    index
 ) {
-    const hasContent =
+
+    const text =
         item.text.trim() ||
-        item.image;
+        "Photo";
+
 
     const imageMarkup =
         item.image
+
             ? `
                 <div class="mm-play-image">
+
                     <img
                         src="${item.image}"
                         alt=""
                     >
+
                 </div>
             `
-            : `
-                <div class="mm-play-image">
-                    <div class="mm-play-placeholder">
-                        ${
-                            hasContent
-                                ? "No photo"
-                                : "Not set up yet"
-                        }
-                    </div>
-                </div>
-            `;
 
-    const text =
-        item.text.trim() ||
-        "Not set up yet";
+            : "";
+
 
     return `
+
         <button
             type="button"
             class="mm-play-card"
             data-play-card
             data-row="${rowName}"
+            data-card-key="${rowName}-${index}"
             data-pair-id="${item.pairId}"
-            aria-label="${escapeHtml(text)}"
         >
+
             ${imageMarkup}
 
             <span class="mm-play-text">
                 ${escapeHtml(text)}
             </span>
+
         </button>
     `;
 }
+
+
+
+/* =========================================================
+   DRAW PLAYER LINES
+========================================================= */
 
 function drawMatchLines(
     board,
     choices,
     showResults = false
 ) {
+
     const svg =
         board.querySelector(
             ".mm-line-layer"
         );
 
+
     if (!svg) {
         return;
     }
 
-    const boardRect =
+
+    const rect =
         board.getBoundingClientRect();
+
 
     svg.setAttribute(
         "viewBox",
-        `0 0 ${boardRect.width} ${boardRect.height}`
+        `0 0 ${rect.width} ${rect.height}`
     );
+
 
     svg.innerHTML = "";
 
+
     choices.forEach(
-        (choice) => {
-            const topCard =
+        choice => {
+
+            const first =
                 board.querySelector(
-                    `[data-play-card][data-row="first"][data-card-key="${choice.firstKey}"]`
+                    `[data-card-key="${choice.firstKey}"]`
                 );
 
-            const bottomCard =
+
+            const match =
                 board.querySelector(
-                    `[data-play-card][data-row="match"][data-card-key="${choice.matchKey}"]`
+                    `[data-card-key="${choice.matchKey}"]`
                 );
+
 
             if (
-                !topCard ||
-                !bottomCard
+                !first ||
+                !match
             ) {
                 return;
             }
 
-            const topRect =
-                topCard.getBoundingClientRect();
 
-            const bottomRect =
-                bottomCard.getBoundingClientRect();
+            const firstRect =
+                first.getBoundingClientRect();
+
+
+            const matchRect =
+                match.getBoundingClientRect();
+
 
             const x1 =
-                topRect.left -
-                boardRect.left +
-                topRect.width / 2;
+                firstRect.left -
+                rect.left +
+                firstRect.width / 2;
+
 
             const y1 =
-                topRect.bottom -
-                boardRect.top;
+                firstRect.bottom -
+                rect.top;
+
 
             const x2 =
-                bottomRect.left -
-                boardRect.left +
-                bottomRect.width / 2;
+                matchRect.left -
+                rect.left +
+                matchRect.width / 2;
+
 
             const y2 =
-                bottomRect.top -
-                boardRect.top;
+                matchRect.top -
+                rect.top;
+
 
             const correct =
                 choice.firstPairId ===
                 choice.matchPairId;
 
-            const stroke =
+
+            const color =
                 showResults
+
                     ? (
                         correct
                             ? "#248a3d"
                             : "#d70015"
                     )
-                    : "rgba(0, 113, 227, 0.66)";
+
+                    : "rgba(0,113,227,0.68)";
+
+
+            const middleY =
+                (y1 + y2) / 2;
+
 
             const path =
                 document.createElementNS(
@@ -817,209 +1697,281 @@ function drawMatchLines(
                     "path"
                 );
 
-            const middleY =
-                (y1 + y2) / 2;
 
             path.setAttribute(
                 "d",
-                `
-                    M ${x1} ${y1}
-                    C ${x1} ${middleY},
-                      ${x2} ${middleY},
-                      ${x2} ${y2}
-                `
+
+                `M ${x1} ${y1}
+                 C ${x1} ${middleY},
+                   ${x2} ${middleY},
+                   ${x2} ${y2}`
             );
+
 
             path.setAttribute(
                 "fill",
                 "none"
             );
 
+
             path.setAttribute(
                 "stroke",
-                stroke
+                color
             );
+
 
             path.setAttribute(
                 "stroke-width",
                 "4"
             );
 
+
             path.setAttribute(
                 "stroke-linecap",
                 "round"
             );
 
-            path.setAttribute(
-                "opacity",
-                "0.92"
-            );
 
             svg.appendChild(path);
         }
     );
 }
 
-function initGame() {
+
+
+/* =========================================================
+   ACTUAL GAME
+========================================================= */
+
+function initGamePage() {
+
     const root =
         document.querySelector(
-            "[data-game-level]"
+            "[data-game-page]"
         );
+
 
     if (!root) {
         return;
     }
 
-    const level =
-        root.dataset.gameLevel;
 
-    const savedPairs =
-        loadPairs(level);
+    const category =
+        getCategoryFromUrl();
 
-    const validPairs =
-        savedPairs.filter(
-            (pair) =>
-                (
-                    pair.first.text.trim() ||
-                    pair.first.image
-                ) &&
-                (
-                    pair.match.text.trim() ||
-                    pair.match.image
-                )
+
+    const gameId =
+        getGameIdFromUrl();
+
+
+    const games =
+        loadCategoryGames(category);
+
+
+    const game =
+        games.find(
+            item =>
+                item.id === gameId
         );
 
-    const boardWrap =
-        root.querySelector(
-            "[data-game-area]"
-        );
 
-    const emptyMessage =
-        root.querySelector(
-            "[data-empty-message]"
-        );
+    const categoryBack =
+        `play-category.html?category=${category}`;
 
-    if (validPairs.length === 0) {
-        boardWrap.hidden = true;
-        emptyMessage.hidden = false;
+
+    root
+        .querySelector(
+            "[data-game-back]"
+        )
+        .href =
+            categoryBack;
+
+
+    root
+        .querySelector(
+            "[data-results-back]"
+        )
+        .href =
+            categoryBack;
+
+
+    if (!game) {
+
+        root
+            .querySelector(
+                "[data-game-area]"
+            )
+            .hidden =
+                true;
+
+
+        root
+            .querySelector(
+                "[data-empty-game]"
+            )
+            .hidden =
+                false;
+
 
         return;
     }
 
+
+    root
+        .querySelector(
+            "[data-game-title]"
+        )
+        .textContent =
+            game.name;
+
+
+    const validPairs =
+        game.pairs.filter(
+            pair =>
+                (
+                    pair.first.text ||
+                    pair.first.image
+                ) &&
+                (
+                    pair.match.text ||
+                    pair.match.image
+                )
+        );
+
+
+    if (
+        validPairs.length === 0
+    ) {
+
+        root
+            .querySelector(
+                "[data-game-area]"
+            )
+            .hidden =
+                true;
+
+
+        root
+            .querySelector(
+                "[data-empty-game]"
+            )
+            .hidden =
+                false;
+
+
+        return;
+    }
+
+
     const firstItems =
         shuffle(
             validPairs.map(
-                (pair) => ({
+                pair => ({
                     ...pair.first,
                     pairId: pair.id
                 })
             )
         );
 
-    const matchItems =
+
+    const matchingItems =
         shuffle(
             validPairs.map(
-                (pair) => ({
+                pair => ({
                     ...pair.match,
                     pairId: pair.id
                 })
             )
         );
 
+
     const firstRow =
         root.querySelector(
             "[data-play-first-row]"
         );
+
 
     const matchRow =
         root.querySelector(
             "[data-play-match-row]"
         );
 
+
+    firstRow.innerHTML =
+        firstItems
+
+            .map(
+                (item, index) =>
+                    makePlayCard(
+                        item,
+                        "first",
+                        index
+                    )
+            )
+
+            .join("");
+
+
+    matchRow.innerHTML =
+        matchingItems
+
+            .map(
+                (item, index) =>
+                    makePlayCard(
+                        item,
+                        "match",
+                        index
+                    )
+            )
+
+            .join("");
+
+
     const board =
         root.querySelector(
             "[data-game-board]"
         );
+
 
     const progress =
         root.querySelector(
             "[data-progress]"
         );
 
+
     const results =
         root.querySelector(
             "[data-results]"
         );
+
+
+    const score =
+        root.querySelector(
+            "[data-score]"
+        );
+
 
     const resultList =
         root.querySelector(
             "[data-result-list]"
         );
 
-    const scoreText =
-        root.querySelector(
-            "[data-score]"
-        );
 
     let selectedFirst = null;
     let selectedMatch = null;
-    let choices = [];
 
-    firstRow.innerHTML =
-        firstItems
-            .map(
-                (item, index) => {
-                    const markup =
-                        makePlayCard(
-                            item,
-                            "first"
-                        );
+    const choices = [];
 
-                    return markup.replace(
-                        'data-pair-id="',
-                        `data-card-key="first-${index}" data-pair-id="`
-                    );
-                }
-            )
-            .join("");
-
-    matchRow.innerHTML =
-        matchItems
-            .map(
-                (item, index) => {
-                    const markup =
-                        makePlayCard(
-                            item,
-                            "match"
-                        );
-
-                    return markup.replace(
-                        'data-pair-id="',
-                        `data-card-key="match-${index}" data-pair-id="`
-                    );
-                }
-            )
-            .join("");
 
     function updateProgress() {
+
         progress.textContent =
             `${choices.length} of ${validPairs.length} matches selected`;
     }
 
-    function clearCurrentSelection() {
-        selectedFirst?.classList.remove(
-            "is-selected"
-        );
 
-        selectedMatch?.classList.remove(
-            "is-selected"
-        );
+    function makeChoice() {
 
-        selectedFirst = null;
-        selectedMatch = null;
-    }
-
-    function completeChoice() {
         if (
             !selectedFirst ||
             !selectedMatch
@@ -1027,7 +1979,9 @@ function initGame() {
             return;
         }
 
+
         const choice = {
+
             firstKey:
                 selectedFirst.dataset.cardKey,
 
@@ -1059,73 +2013,106 @@ function initGame() {
                     .textContent
         };
 
+
+        selectedFirst.classList.remove(
+            "is-selected"
+        );
+
+
+        selectedMatch.classList.remove(
+            "is-selected"
+        );
+
+
         selectedFirst.classList.add(
             "is-used"
         );
+
 
         selectedMatch.classList.add(
             "is-used"
         );
 
-        selectedFirst.disabled = true;
-        selectedMatch.disabled = true;
+
+        selectedFirst.disabled =
+            true;
+
+
+        selectedMatch.disabled =
+            true;
+
 
         choices.push(choice);
 
-        clearCurrentSelection();
+
+        selectedFirst = null;
+        selectedMatch = null;
+
+
         updateProgress();
+
 
         drawMatchLines(
             board,
-            choices,
-            false
+            choices
         );
+
 
         if (
             choices.length ===
             validPairs.length
         ) {
+
             showResults();
         }
     }
 
+
     function showResults() {
-        const score =
+
+        const correct =
             choices.filter(
-                (choice) =>
+                choice =>
                     choice.firstPairId ===
                     choice.matchPairId
             ).length;
 
+
         choices.forEach(
-            (choice) => {
-                const correct =
+            choice => {
+
+                const isCorrect =
                     choice.firstPairId ===
                     choice.matchPairId;
 
-                const topCard =
+
+                const first =
                     board.querySelector(
                         `[data-card-key="${choice.firstKey}"]`
                     );
 
-                const bottomCard =
+
+                const match =
                     board.querySelector(
                         `[data-card-key="${choice.matchKey}"]`
                     );
 
-                topCard.classList.add(
-                    correct
+
+                first.classList.add(
+                    isCorrect
                         ? "is-correct"
                         : "is-wrong"
                 );
 
-                bottomCard.classList.add(
-                    correct
+
+                match.classList.add(
+                    isCorrect
                         ? "is-correct"
                         : "is-wrong"
                 );
             }
         );
+
 
         drawMatchLines(
             board,
@@ -1133,32 +2120,38 @@ function initGame() {
             true
         );
 
-        scoreText.textContent =
-            `You matched ${score} out of ${validPairs.length} correctly.`;
+
+        score.textContent =
+            `You matched ${correct} out of ${validPairs.length} correctly.`;
+
 
         resultList.innerHTML =
             choices
+
                 .map(
-                    (choice) => {
-                        const correct =
+                    choice => {
+
+                        const isCorrect =
                             choice.firstPairId ===
                             choice.matchPairId;
 
-                        const symbol =
-                            correct
-                                ? "✓"
-                                : "✕";
 
                         return `
+
                             <li
                                 class="mm-result-item ${
-                                    correct
+                                    isCorrect
                                         ? "correct"
                                         : "wrong"
                                 }"
                             >
+
                                 <strong>
-                                    ${symbol}
+                                    ${
+                                        isCorrect
+                                            ? "✓"
+                                            : "✕"
+                                    }
                                     ${escapeHtml(choice.firstText)}
                                 </strong>
 
@@ -1167,13 +2160,18 @@ function initGame() {
                                 <strong>
                                     ${escapeHtml(choice.matchText)}
                                 </strong>
+
                             </li>
                         `;
                     }
                 )
+
                 .join("");
 
-        results.hidden = false;
+
+        results.hidden =
+            false;
+
 
         results.scrollIntoView({
             behavior: "smooth",
@@ -1181,84 +2179,107 @@ function initGame() {
         });
     }
 
+
     root.addEventListener(
         "click",
-        (event) => {
+        event => {
+
             const card =
                 event.target.closest(
                     "[data-play-card]"
                 );
 
+
             if (
                 card &&
                 !card.disabled
             ) {
-                const row =
-                    card.dataset.row;
 
-                if (row === "first") {
+                if (
+                    card.dataset.row ===
+                    "first"
+                ) {
+
                     selectedFirst
                         ?.classList
                         .remove(
                             "is-selected"
                         );
 
-                    selectedFirst = card;
 
-                    selectedFirst
-                        .classList
-                        .add(
-                            "is-selected"
-                        );
+                    selectedFirst =
+                        card;
+
+
+                    card.classList.add(
+                        "is-selected"
+                    );
+
                 } else {
+
                     selectedMatch
                         ?.classList
                         .remove(
                             "is-selected"
                         );
 
-                    selectedMatch = card;
 
-                    selectedMatch
-                        .classList
-                        .add(
-                            "is-selected"
-                        );
+                    selectedMatch =
+                        card;
+
+
+                    card.classList.add(
+                        "is-selected"
+                    );
                 }
 
-                completeChoice();
 
-                return;
+                makeChoice();
             }
+
 
             if (
                 event.target.closest(
                     "[data-try-again]"
                 )
             ) {
+
                 window.location.reload();
             }
         }
     );
 
+
     window.addEventListener(
         "resize",
-        () => {
+        () =>
             drawMatchLines(
                 board,
                 choices,
                 !results.hidden
-            );
-        }
+            )
     );
+
 
     updateProgress();
 }
 
+
+
+/* =========================================================
+   START EVERYTHING
+========================================================= */
+
 document.addEventListener(
     "DOMContentLoaded",
     () => {
-        initEditor();
-        initGame();
+
+        initCategorySetupPage();
+
+        initGameEditor();
+
+        initPlayCategoryPage();
+
+        initGamePage();
     }
 );
