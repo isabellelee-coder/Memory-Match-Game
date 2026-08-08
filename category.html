@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Category | Memory Match</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="game-pages.css">
+</head>
+
+<body>
+
+    <main
+        class="mm-page"
+        data-category-setup-page
+    >
+
+        <header class="mm-page-header">
+
+            <a
+                class="mm-back-link"
+                href="setup.html"
+            >
+                ← Back
+            </a>
+
+            <h1 data-category-title>
+                Category
+            </h1>
+
+            <p
+                class="mm-lead"
+                data-category-description
+            ></p>
+
+        </header>
+
+
+        <section
+            class="mm-info-panel"
+            data-category-instructions
+        >
+
+            <h2>Examples</h2>
+
+            <div
+                class="mm-example-grid"
+                data-category-examples
+            ></div>
+
+            <p class="mm-note">
+                You can create multiple matching games inside this category.
+                Each game can contain up to six matching pairs.
+            </p>
+
+        </section>
+
+
+        <section class="mm-game-library">
+
+            <div class="mm-library-heading">
+
+                <div>
+                    <h2>Your Games</h2>
+
+                    <p>
+                        Create and label different games to keep everything organized.
+                    </p>
+                </div>
+
+                <button
+                    class="mm-button mm-button-primary"
+                    type="button"
+                    data-create-game
+                >
+                    + New Game
+                </button>
+
+            </div>
+
+
+            <div
+                class="mm-saved-games-grid"
+                data-saved-games
+            ></div>
+
+
+            <div
+                class="mm-empty-message"
+                data-no-games
+                hidden
+            >
+                You have not created any games in this category yet.
+                Select <strong>New Game</strong> to create your first one.
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script src="memory-game.js"></script>
+
+</body>
+</html>
